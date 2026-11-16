@@ -476,6 +476,118 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ── CLI Command Line Section: Like Top GitHub Projects ── */}
+      <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-gray-800/80">
+        <div className="text-center max-w-3xl mx-auto mb-8">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 text-teal-300 text-xs font-mono font-bold mb-3 border border-teal-500/20">
+            <Terminal className="w-3.5 h-3.5 text-teal-400" />
+            <span>npx shieldcode v2.1.0</span>
+          </div>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
+            إضافة الأداة إلى خوادم البنوك عبر لوحة الأوامر (CLI)
+          </h2>
+          <p className="text-xs sm:text-sm text-gray-400 mt-2">
+            تماماً مثل أشهر أدوات ومشاريع GitHub، يستطيع مهندس البنك إضافة الأداة وحقن الرمز السري مباشرة من الـ Terminal بأمر واحد:
+          </p>
+        </div>
+
+        {/* Terminal Window */}
+        <div className="max-w-4xl mx-auto rounded-3xl bg-[#030712] border border-gray-800 shadow-2xl overflow-hidden font-mono text-xs">
+          {/* Top Bar */}
+          <div className="px-4 py-3 bg-[#0a0f1d] border-b border-gray-800/80 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="w-3 h-3 rounded-full bg-red-500/80 inline-block" />
+              <span className="w-3 h-3 rounded-full bg-amber-500/80 inline-block" />
+              <span className="w-3 h-3 rounded-full bg-emerald-500/80 inline-block" />
+              <span className="text-gray-400 text-[11px] mr-2">bash — terminal@bank-server: ~</span>
+            </div>
+            <span className="text-[10px] text-teal-400 bg-teal-950/60 px-2.5 py-0.5 rounded border border-teal-500/30">
+              GitHub CLI Ready
+            </span>
+          </div>
+
+          {/* Quick Command Launcher Buttons */}
+          <div className="p-3 bg-[#070c18] border-b border-gray-800 flex flex-wrap gap-2 text-[11px]" dir="ltr">
+            <span className="text-gray-500 self-center mr-1">Quick Run:</span>
+            <button
+              onClick={() => {
+                setEmulatorMessage({
+                  text: `✓ تم تهيئة أداة ShieldCode في مشروع البنك.\nتم إنشاء ملف الإعدادات: shieldcode.config.json`,
+                  isPhishing: false,
+                  sender: "ShieldCode CLI",
+                  time: "الآن",
+                });
+              }}
+              className="px-2.5 py-1 rounded bg-gray-800 hover:bg-gray-700 text-teal-300 transition-colors"
+            >
+              $ npx shieldcode init
+            </button>
+            <button
+              onClick={() => {
+                defaultShieldCode.setCode("0555123456", "AYOUB2026", true);
+                setUserCode("AYOUB2026");
+                simulateLegitNotification();
+              }}
+              className="px-2.5 py-1 rounded bg-gray-800 hover:bg-gray-700 text-teal-300 transition-colors"
+            >
+              $ shieldcode protect --user 0555123456
+            </button>
+            <button
+              onClick={simulatePhishingAttack}
+              className="px-2.5 py-1 rounded bg-red-950/60 hover:bg-red-900/60 text-red-300 border border-red-800/50 transition-colors"
+            >
+              $ shieldcode verify (فحص تصيد احتيالي)
+            </button>
+          </div>
+
+          {/* Terminal Screen Content */}
+          <div className="p-5 text-gray-200 space-y-4 leading-relaxed text-left overflow-x-auto" dir="ltr">
+            <div>
+              <span className="text-emerald-400 font-bold">developer@bank-app</span>
+              <span className="text-gray-500">:</span>
+              <span className="text-teal-400">~/backend</span>
+              <span className="text-gray-400">$ </span>
+              <span className="text-white font-bold">npx shieldcode protect --user 0555123456 --msg &quot;كود التحقق OTP هو 889102&quot;</span>
+            </div>
+
+            <div className="text-teal-400 text-[11px] leading-tight select-none">
+              {"  ███████╗██╗  ██╗██╗███████╗██╗     ██████╗  ██████╗  ██████╗ ███████╗"}<br />
+              {"  ██╔════╝██║  ██║██║██╔════╝██║     ██╔══██╗██╔════╝ ██╔═══██╗██╔════╝"}<br />
+              {"  ███████╗███████║██║█████╗  ██║     ██║  ██║██║      ██║   ██║█████╗  "}<br />
+              {"  Anti-Phishing Security CLI Tool for Banking & Financial Platforms v2.1.0"}
+            </div>
+
+            <div className="space-y-1.5 text-xs">
+              <div className="text-emerald-400 font-bold">✓ تم حقن رمز مكافحة التصيد في الرسالة بنجاح:</div>
+              <div className="p-3 rounded-xl bg-gray-900 border border-teal-500/30 text-white font-mono">
+                <span className="text-teal-400 font-bold">[رمزك: AYOUB2026]</span>
+                <br />
+                كود التحقق OTP هو 889102 لتأكيد العملية.
+              </div>
+              <div className="text-gray-400 text-[11px]">
+                الحساب: 0555123456 | القناة: SMS Telecom Gateway (Mobilis/Djezzy/Ooredoo) | الحالة: مؤمّن 100%
+              </div>
+            </div>
+
+            <div className="pt-2 border-t border-gray-800/80">
+              <div>
+                <span className="text-emerald-400 font-bold">developer@bank-app</span>
+                <span className="text-gray-500">:</span>
+                <span className="text-teal-400">~/backend</span>
+                <span className="text-gray-400">$ </span>
+                <span className="text-white font-bold">npx shieldcode verify --user 0555123456 --msg &quot;Alert: تم تعليق حسابك اضغط الرابط&quot;</span>
+              </div>
+              <div className="text-red-400 font-bold mt-2">
+                🚨 نتيجة الفحص: تحذير من محاولة تصيد احتيالي (SMISHING DETECTED)
+              </div>
+              <div className="text-gray-300 text-[11px]">
+                الرسالة لا تحتوي على الرمز السري [AYOUB2026]. المخترق ينتحل اسم البنك!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── How Institutions Integrate (Integration in 3 Lines) ── */}
       <section id="integration" className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-gray-800/80">
         <div className="text-center max-w-3xl mx-auto mb-12">

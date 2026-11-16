@@ -1,12 +1,17 @@
 {
-  "name": "my-v0-project",
-  "version": "0.1.0",
+  "name": "shieldcode",
+  "version": "2.1.0",
+  "description": "Universal Anti-Phishing Security CLI & Tool for Banking Platforms",
+  "bin": {
+    "shieldcode": "./bin/shieldcode.js"
+  },
   "private": true,
   "scripts": {
     "build": "next build",
     "dev": "next dev",
     "lint": "eslint .",
-    "start": "next start"
+    "start": "next start",
+    "cli": "node bin/shieldcode.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
