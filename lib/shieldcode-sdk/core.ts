@@ -11,7 +11,7 @@ import {
 /**
  * ShieldCodeCore Engine
  * Universal, framework-agnostic Anti-Phishing security tool.
- * Can be imported into any Node.js, Next.js, Express, React, or mobile application.
+ * Enables institutions to protect users by injecting user-defined Anti-Phishing codes into official communications.
  */
 export class ShieldCodeCore {
   private config: ShieldCodeConfig;
@@ -19,7 +19,7 @@ export class ShieldCodeCore {
 
   constructor(config: ShieldCodeConfig = {}) {
     this.config = {
-      institutionName: config.institutionName || 'ShieldCode Bank Network',
+      institutionName: config.institutionName || 'ShieldCode Enterprise Security',
       defaultChannel: config.defaultChannel || 'sms',
       storageAdapter: config.storageAdapter || 'local',
       ...config,
@@ -27,10 +27,10 @@ export class ShieldCodeCore {
   }
 
   /**
-   * Validate if a proposed Anti-Phishing code meets financial security standards
-   * - Must be between 4 and 20 characters
-   * - Must contain both letters and digits
-   * - No spaces allowed
+   * Validate if a proposed Anti-Phishing code meets security standards
+   * - 4 to 20 characters
+   * - Contains letters and digits
+   * - No whitespace
    */
   public validateCode(code: string): CodeValidationResult {
     const errors: string[] = [];
@@ -40,17 +40,17 @@ export class ShieldCodeCore {
 
     const trimmed = code.trim();
     if (trimmed.length < 4) {
-      errors.push('الرمز يجب أن يحتوي على 4 أحرف/أرقام على الأقل');
+      errors.push('الرمز يجب أن يحتوي على 4 خانات على الأقل');
     }
     if (trimmed.length > 20) {
-      errors.push('الرمز لا يمكن أن يتجاوز 20 حرفاً/رقماً');
+      errors.push('الرمز لا يمكن أن يتجاوز 20 خانة');
     }
     if (/\s/.test(code)) {
       errors.push('الرمز لا يجب أن يحتوي على مسافات');
     }
     const hasLetters = /[A-Za-z\u0621-\u064A]/.test(code);
     if (!hasLetters) {
-      errors.push('الرمز يجب أن يحتوي على حرف واحد على الأقل (عربي أو لاتيني)');
+      errors.push('الرمز يجب أن يحتوي على حرف واحد على الأقل');
     }
     const hasDigits = /[0-9\u0660-\u0669]/.test(code);
     if (!hasDigits) {
@@ -64,7 +64,7 @@ export class ShieldCodeCore {
   }
 
   /**
-   * Save or update a user's Anti-Phishing Code in storage
+   * Save or update a user's Anti-Phishing Code
    */
   public setCode(userId: string, code: string, enabled: boolean = true): AntiPhishingRecord {
     const validation = this.validateCode(code);
@@ -88,6 +88,9 @@ export class ShieldCodeCore {
       try {
         const key = `shieldcode_rec_${userId}`;
         window.localStorage.setItem(key, JSON.stringify(record));
+        // Also save as current active code for browser extension / active session
+        window.localStorage.setItem('shieldcode_active_code', record.code);
+        window.localStorage.setItem('shieldcode_active_user', userId);
       } catch (e) {
         console.warn('ShieldCode: Could not save to localStorage', e);
       }
@@ -123,16 +126,22 @@ export class ShieldCodeCore {
   }
 
   /**
-   * THE CORE TOOL FUNCTION:
-   * Protects any outgoing Bank SMS / Email / Push notification by injecting the user's secret code.
+   * Get all active records stored locally
+   */
+  public getAllRecords(): AntiPhishingRecord[] {
+    return Array.from(this.memoryStore.values());
+  }
+
+  /**
+   * Institutional Injection:
+   * Protects an outgoing SMS / Email / Push notification by injecting the user's secret code.
    */
   public injectNotification(options: InjectNotificationOptions): InjectNotificationResult {
-    const { userId, rawMessage, channel = this.config.defaultChannel || 'sms' } = options;
+    const { userId, rawMessage, channel = this.config.defaultChannel || 'sms', customSender } = options;
     const record = this.getCode(userId);
-    const auditId = `sc_audit_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+    const auditId = `sc_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 
     if (!record || !record.enabled || !record.code) {
-      // User has no code or disabled protection
       return {
         success: false,
         protectedMessage: rawMessage,
@@ -143,20 +152,18 @@ export class ShieldCodeCore {
       };
     }
 
-    // Format based on channel
     let protectedMessage = '';
     const cleanCode = record.code;
+    const sender = customSender || this.config.institutionName || 'المؤسسة المالية';
 
     if (channel === 'sms') {
-      // Standard SMS Injection: Binance / Algerian Banking Standard
-      protectedMessage = `[رمزك: ${cleanCode}]\n${rawMessage}`;
+      protectedMessage = `[رمزك الأمني: ${cleanCode}]\n${rawMessage}`;
     } else if (channel === 'email') {
-      protectedMessage = `[Anti-Phishing Code: ${cleanCode}]\n\n${rawMessage}\n\n---\n🛡️ هذا البريد موثق برمزك السري لدى ${this.config.institutionName}. إذا لم يطابق الرمز، فهو تصيد احتيالي!`;
+      protectedMessage = `[Anti-Phishing Code: ${cleanCode}]\n\n${rawMessage}\n\n---\n🛡️ هذا البريد موثق برمزك الأمني الشخصي المعتمد لدى ${sender}. في حال عدم تطابق الرمز، يُرجى الحذر؛ فهذه محاولة تصيد!`;
     } else {
-      protectedMessage = `[${cleanCode}] ${rawMessage}`;
+      protectedMessage = `[رمزك: ${cleanCode}] ${rawMessage}`;
     }
 
-    // Update last used timestamp
     record.lastUsedAt = Date.now();
     this.memoryStore.set(userId, record);
 
@@ -172,35 +179,32 @@ export class ShieldCodeCore {
   }
 
   /**
-   * Verification Tool:
-   * Checks whether a given message text is authentic or a phishing attempt.
+   * Message Verification:
+   * Checks whether an incoming message is authentic or a phishing attempt.
    */
   public verifyMessage(options: VerifyMessageOptions): VerifyMessageResult {
     const { userId, fullMessageText, providedCode } = options;
-    const record = this.getCode(userId);
+    const record = userId ? this.getCode(userId) : null;
+    const expectedCode = record?.code || providedCode;
 
-    if (!record || !record.enabled) {
+    if (!expectedCode) {
       return {
         isAuthentic: false,
         status: 'USER_NOT_PROTECTED',
         confidence: 0.5,
-        reason: 'المستخدم لم يقم بتفعيل رمز مكافحة التصيد في حسابه المصرفي',
+        reason: 'لم يتم تحديد أو العثور على رمز مكافحة تصيد مسجل للمطابقة',
       };
     }
 
-    const expectedCode = record.code;
-
-    // Check if expected code is in message
     const hasCodeInText = fullMessageText.includes(expectedCode);
-    const hasProvidedCodeMatch = providedCode ? providedCode.trim() === expectedCode : false;
 
-    if (hasCodeInText || hasProvidedCodeMatch) {
+    if (hasCodeInText) {
       return {
         isAuthentic: true,
         detectedCode: expectedCode,
         status: 'VERIFIED_GENUINE',
         confidence: 1.0,
-        reason: `تم التحقق بنجاح! الرسالة تحتوي على رمز الأمان السري الخاص بك [${expectedCode}]`,
+        reason: `تم التحقق بنجاح! الرسالة تحتوي على الرمز السري المعتمد [${expectedCode}]، وهي صادرة من الجهة الحقيقية.`,
       };
     }
 
@@ -208,12 +212,12 @@ export class ShieldCodeCore {
       isAuthentic: false,
       status: 'MISSING_CODE',
       confidence: 0.99,
-      reason: `تحذير أمني: الرسالة لا تحتوي على رمزك الشخصي [${expectedCode}]. هذه محاولة تصيد احتيالي بنسبة 99%!`,
+      reason: `تحذير أمني عالي الخطورة: الرسالة لا تحتوي على رمزك الشخصي [${expectedCode}]. هذه محاولة تصيد احتيالي بنسبة 99%!`,
     };
   }
 }
 
-// Global Singleton instance for quick zero-config usage
+// Global default singleton instance
 export const defaultShieldCode = new ShieldCodeCore({
-  institutionName: 'BaridiPay & SATIM Central ShieldCode Network',
+  institutionName: 'ShieldCode Security Protocol',
 });

@@ -1,162 +1,131 @@
-# 🛡️ ShieldCode — Anti-Phishing Security CLI & Tool for Banking
+# 🛡️ ShieldCode — بروتوكول وأداة مكافحة التصيد والاحتيال المالي
 
-[![npm version](https://img.shields.io/badge/npm-v2.1.0-teal.svg?style=flat-square)](https://www.npmjs.com)
+[![version](https://img.shields.io/badge/version-2.2.0-teal.svg?style=flat-square)](#)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
-[![platform](https://img.shields.io/badge/platform-CLI%20%7C%20Node.js%20%7C%20React%20%7C%20REST-green.svg?style=flat-square)](#)
-[![compliance](https://img.shields.io/badge/compliance-PCI--DSS%20%7C%20SATIM%20Ready-emerald.svg?style=flat-square)](#)
+[![platform](https://img.shields.io/badge/platform-Extension%20%7C%20Web%20%7C%20Mobile%20%7C%20CLI%20%7C%20API-teal.svg?style=flat-square)](#)
+[![cybersecurity](https://img.shields.io/badge/security-Anti--Phishing%20Standard-emerald.svg?style=flat-square)](#)
 
-> **أداة وحزمة سطر أوامر مفتوحة المصدر لإضافة حماية رمز مكافحة التصيد والاحتيال (Anti-Phishing Code) إلى الحسابات والتطبيقات المصرفية والمالية بسهولة تامة وبأمر واحد.**
+> **أداة أمان سيبراني مركزية ومستقلة تتيح للمستخدمين تحديد رمز مكافحة تصيد سري خاص بهم، وتُمكّن المؤسسات والمنصات المالية من التعاقد مع أداتنا لتوفير وحقن الأكواد في كافة الإشعارات والـ OTP لحماية الحسابات من هجمات التصيد والاحتيال.**
 
 ---
 
-## ⚡ التثبيت السريع عبر لوحة الأوامر (CLI Installation)
+## 🌟 أشكال تجسيد الأداة (3 Core Implementations)
 
-يمكن إضافة وتشغيل الأداة مباشرة في أي مشروع أو خادم بنكي باستخدام **npx** دون الحاجة لتثبيت مسبق:
+### 1. 🧩 إضافة المتصفح (Browser Extension)
+- تعمل على متصفحات Google Chrome, Microsoft Edge, Brave, Mozilla Firefox (وفق معيار Manifest V3).
+- تتيح للمستخدم استعراض رمزه السري وتفعيله بنقرة واحدة.
+- فحص فوري وسريع لأي نص رسالة أو بريد إلكتروني مشبوه.
+- فحص تلقائي لصفحات الويب وبوابات الدفع وحقن شارة التوثيق الخضراء `[🛡️ ShieldCode Verified]` عند مطابقة الرمز.
+- مجلد الإضافة: `extension/` وحزمة التحميل الجاهزة: `public/shieldcode-extension.zip`.
+
+### 2. 📱 أداة حسابات المستخدمين للهاتف والحاسوب (Embeddable User Tool)
+- مكوّن واجهة مستخدم متجاوب وخفيف الوزن (`ShieldCodeUserTool`).
+- يمكن إضافته في إعدادات الحساب في أي تطبيق مصرفي للهاتف (Mobile App) أو منصة ويب على الحاسوب (Desktop Web).
+- يتيح للمستخدم إنشاء وتعديل رمزه الأمني (4-20 خانة تشمل أحرف وأرقام).
+- تحديد قنوات الإشعار المحمية: الرسائل النصية SMS، البريد الإلكتروني Email، إشعارات التطبيق Push Notifications.
+- صندوق فحص تجريبي مدمج للتحقق من أي رسالة واردة.
+
+### 3. 🏢 منصة تعاقد المؤسسات (Institutional B2B Platform & APIs)
+- منصة موجهة للمؤسسات المالية، البنوك، شركات التكنولوجيا المالية (Fintech)، منصات التجارة الإلكترونية، والبوابات الحكومية.
+- تتعاقد المؤسسة مع ShieldCode للحصول على تراخيص الربط ومفاتيح الـ API (`sc_live_...`).
+- واجهات REST API جاهزة وسريعة:
+  - `POST /api/v1/shieldcode/inject`: لحقن رمز العميل السري في الرسالة قبل إرسالها.
+  - `POST /api/v1/shieldcode/verify`: للتحقق من مصداقية الرسالة أو مطابقة الرمز.
+  - `GET / POST /api/v1/shieldcode/user`: لإدارة وتحديث أكواد العملاء مركزياً.
+- مكتبات ربط وتكامل بعدة لغات: Node.js, Python, Java (Spring Boot), PHP, cURL.
+
+---
+
+## ⚡ أداة سطر الأوامر (CLI Tool)
+
+يمكن للمطورين والمهندسين في المؤسسات استخدام الأداة مباشرة من لوحة الأوامر عبر **npx**:
 
 ```bash
-# تشغيل الأداة مباشرة
+# عرض قائمة الأوامر والمساعدة
 npx shieldcode --help
 
-# أو التثبيت كأداة عامة في النظام
-npm install -g shieldcode
-```
-
----
-
-## 💻 أوامر لوحة الأوامر (Command Line Interface)
-
-### 1. تهيئة الأداة في تطبيق البنك
-```bash
+# تهيئة ملف إعدادات الأداة في مشروع المؤسسة
 npx shieldcode init
-```
-*يقوم بإنشاء ملف الإعدادات `shieldcode.config.json` المعتمد لمعايير الحماية.*
 
-### 2. تعيين رمز سري لحساب عميل
-```bash
-npx shieldcode set --user 0555123456 --code AYOUB2026
-```
-```
-✓ تم تعيين وتفعيل رمز الحماية بنجاح!
-الحساب: 0555123456
-الرمز السري المشترك: [AYOUB2026]
-```
+# تعيين رمز أمان سري لحساب عميل
+npx shieldcode set --user user_101 --code SAFE2026
 
-### 3. حقن الرمز في رسالة SMS أو إيميل بنكي قبل الإرسال
-```bash
-npx shieldcode protect --user 0555123456 --msg "كود التحقق OTP هو 889102"
-```
-```
-✓ تم حقن رمز مكافحة التصيد في الرسالة بنجاح:
-[رمزك: AYOUB2026]
-كود التحقق OTP هو 889102
-```
+# حقن الرمز في رسالة إشعار أو OTP قبل الإرسال
+npx shieldcode protect --user user_101 --msg "رمز تأكيد العملية OTP هو: 440219"
 
-### 4. فحص واكتشاف رسائل التصيد الاحتيالي فوراً
-```bash
-# فحص رسالة مشبوهة واردة
-npx shieldcode verify --user 0555123456 --msg "Alert: تم تجميد حسابك اضغط هنا"
-```
-```
-🚨 نتيجة الفحص: تحذير من محاولة تصيد احتيالي (SMISHING DETECTED)
-الرسالة لا تحتوي على الرمز السري [AYOUB2026].
-المخترق ينتحل اسم البنك! لا تضغط على أي رابط ولا تشارك بياناتك!
+# فحص رسالة واردة للتأكد هل هي أصلية أم محاولة تصيد احتيالي
+npx shieldcode verify --user user_101 --msg "[رمزك الأمني: SAFE2026] رمز تأكيد العملية OTP هو: 440219"
+
+# عرض قائمة الحسابات المحمية
+npx shieldcode list
 ```
 
 ---
 
-## 🚀 الدمج البرمجي في التطبيقات المصرفية (2 Lines of Code)
-
-### في واجهة المستخدم (React / Next.js / Mobile):
-أضف الأداة كخيار أمان بسيط ضمن إعدادات حساب العميل:
-
-```tsx
-import { ShieldCodeWidget } from '@shieldcode/security';
-
-export function SecuritySettings({ user }) {
-  return (
-    <div className="security-menu">
-      {/* سطر واحد فقط يضيف الخيار كاملاً مع المعاينة التلقائية */}
-      <ShieldCodeWidget userId={user.id} bankName="بريدي موب (BaridiMob)" />
-    </div>
-  );
-}
-```
-
-### في خادم الإشعارات والـ OTP (Node.js / Express / Backend):
-قبل إرسال الرسالة إلى موزع الـ SMS (Mobilis, Djezzy, Ooredoo):
-
-```typescript
-import { shieldcode } from '@shieldcode/security';
-
-export async function sendOtp(userId, rawOtpMessage) {
-  // حقن الرمز السري في نص الرسالة
-  const secureMessage = shieldcode.protect(userId, rawOtpMessage);
-  
-  // إرسال الرسالة الموثقة للمواطن
-  await telecomSmsGateway.send(userId, secureMessage);
-}
-```
-
----
-
-## 🏛️ كيف يمنع ShieldCode التصيد في الجزائر؟ (How it Works)
+## 🏗️ بنية المشروع (Clean Project Architecture)
 
 ```
-        ┌────────────────────────────────────────────────────────┐
-        │     المواطن يعيّن كلمته السرية الخاصة (مثال: AYOUB2026) │
-        │     (سر مشترك بين العميل وخادم البنك فقط)               │
-        └───────────────────────────┬────────────────────────────┘
-                                    │
-    ┌───────────────────────────────┴───────────────────────────────┐
-    ▼                                                               ▼
-[رسالة رسمية من بريد الجزائر / البنك]                 [محاولة تصيد احتيالي وانتحال صفة]
-    │                                                               │
-    ▼                                                               ▼
-البنك يقرأ الرمز المشترك ويحقنه تلقائياً:             المخترق ينتحل اسم البنك لكنه مستحيل يعلم الرمز!
-"[AYOUB2026] بريدي موب: كود OTP هو 8891..."          "Alert: تم تعليق حسابك اضغط الرابط..."
-    │                                                               │
-    ▼                                                               ▼
-✅ العميل يرى رمزه = البنك حقيقي 100%                 🚨 غياب الرمز يفضح الاحتيال في ثانية واحدة!
-```
-
----
-
-## 📁 هيكلة المشروع (Project Structure)
-
-```
-ShieldCode-Security/
+├── app/
+│   ├── page.tsx                 # الواجهة الرئيسية للمنصة والمختبر التفاعلي
+│   ├── extension/page.tsx       # صفحة إضافة المتصفح مع المحاكي ورابط التحميل
+│   ├── user-tool/page.tsx       # صفحة استعراض أداة الحساب (وضع الهاتف والحاسوب)
+│   ├── enterprise/page.tsx      # بوابة تعاقد المؤسسات واستدعاءات الـ API
+│   ├── tool/page.tsx            # دليل المطورين وأوامر الـ CLI
+│   └── api/v1/shieldcode/       # واجهات REST API المركزية (inject, verify, user, health)
 ├── bin/
-│   └── shieldcode.js           # أداة سطر الأوامر التنفيذية (CLI Tool)
+│   └── shieldcode.js            # أداة سطر الأوامر المستقلة (CLI)
 ├── components/
 │   └── shieldcode/
-│       ├── AntiPhishingSecurityOption.tsx  # خيار الأمان البسيط للتطبيقات
-│       └── ShieldCodeWidget.tsx            # المكون المدمج المستقل
+│       ├── ShieldCodeUserTool.tsx           # أداة المستخدم المتجاوبة للهاتف والحاسوب
+│       ├── ShieldCodeWidget.tsx             # ويدجت إعداد الرمز المدمجة
+│       └── AntiPhishingSecurityOption.tsx   # خيار أمان مدمج قابل للطي
+├── extension/                   # ملفات إضافة المتصفح الرسمية (Manifest V3)
+│   ├── manifest.json
+│   ├── popup.html
+│   ├── popup.css
+│   ├── popup.js
+│   ├── content.js
+│   ├── content.css
+│   ├── background.js
+│   └── icons/
 ├── lib/
-│   └── shieldcode-sdk/
-│       ├── core.ts             # محرك الأداة (Validate, Inject, Verify)
-│       └── types.ts            # واجهات المعطيات
-├── app/
-│   ├── page.tsx                # منصة عرض الأداة والمحاكي التفاعلي المباشر
-│   ├── tool/                   # بوابة الـ SDK والمختبر الحي للشركاء
-│   ├── api/v1/shieldcode/      # REST API للمؤسسات المتعاقدة
-│   └── dashboard/satim/        # محاكاة المعيار الوطني الموحد (SATIM)
-├── package.json
-└── README.md
+│   ├── shieldcode-sdk/          # محرك الأمان الأساسي المستقل (Core Engine & SDK)
+│   └── types.ts                 # تعريفات الأنواع والواجهات البرمجية
+└── public/
+    └── shieldcode-extension.zip # حزمة الإضافة المضغوطة القابلة للتحميل والتثبيت
 ```
 
 ---
 
-## 🛠️ التشغيل المحلي للمنصة والمحاكي (Local Development)
+## 🔒 النموذج الأمني (Security Model)
+
+```
+[ المستخدم ]  ──( يحدد رمزه السري مرة واحدة )──>  [ أداة ShieldCode ]
+                                                           │
+                                             (حفظ مشفر بروتوكولياً)
+                                                           ▼
+[ المؤسسة المتعاقدة ] ──( استدعاء injectNotification )──> [ حقن الرمز الأمني في الرسالة ]
+                                                           │
+                                             (إرسال الرسالة المحمية)
+                                                           ▼
+[ هاتف / بريد المستخدم ] <── "[رمزك: SECURE99] رمز الـ OTP هو 881204"
+
+* النتيجة:
+- إذا وصلت الرسالة وفيها الرمز [SECURE99] = رسالة أصلية موثقة من المؤسسة.
+- إذا وصلت رسالة بدون الرمز = محاولة تصيد احتيالي (Phishing/Smishing) بنسبة 99%!
+```
+
+---
+
+## 🚀 التشغيل والتطوير المحلي
 
 ```bash
-git clone https://github.com/flavrgo-cell/ShieldCode-Security.git
-cd ShieldCode-Security
+# تثبيت الاعتماديات
 npm install
+
+# تشغيل خادم التطوير
 npm run dev
+
+# بناء المشروع للإنتاج
+npm run build
 ```
-افتح المتصفح على: `http://localhost:3000`
-
----
-
-## 📄 الترخيص (License)
-مشروع مفتوح المصدر تحت ترخيص **MIT License** — صُمم كأداة أمنية لحماية المعاملات البنكية ومكافحة التصيد المالي.

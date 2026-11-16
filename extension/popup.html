@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShieldCode - مكافحة التصيد</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo-box">
+        <div class="shield-icon">🛡️</div>
+        <div>
+          <h1>ShieldCode</h1>
+          <span class="badge">بروتوكول مكافحة التصيد</span>
+        </div>
+      </div>
+      <div class="status-indicator" id="statusPill">
+        <span class="status-dot"></span>
+        <span id="statusText">مفعّل</span>
+      </div>
+    </header>
+
+    <!-- Code Display Card -->
+    <div class="card code-card">
+      <div class="card-label">رمزك الأمني السري المعتمد:</div>
+      <div class="code-box">
+        <span class="code-val" id="codeDisplay">••••••••</span>
+        <div class="code-actions">
+          <button id="toggleShowBtn" class="icon-btn" title="إظهار / إخفاء">👁️</button>
+          <button id="editCodeBtn" class="icon-btn" title="تعديل الرمز">✏️</button>
+        </div>
+      </div>
+      <p class="hint">يجب أن يظهر هذا الرمز في بداية جميع الرسائل الرسمية من منصاتك المتعاقدة.</p>
+    </div>
+
+    <!-- Edit Form (Hidden by default) -->
+    <div class="card edit-card hidden" id="editForm">
+      <label for="newCodeInput">تعيين رمز أمني جديد:</label>
+      <div class="input-row">
+        <input type="text" id="newCodeInput" placeholder="مثال: SECURE99" maxlength="20" dir="ltr">
+        <button id="saveCodeBtn" class="primary-btn">حفظ</button>
+      </div>
+      <span class="field-error hidden" id="editError"></span>
+    </div>
+
+    <!-- Quick Message Verifier -->
+    <div class="card verifier-card">
+      <div class="card-title">🔍 فحص سريع لأي رسالة أو إيميل:</div>
+      <textarea id="verifyInput" placeholder="الصق نص الرسالة الواردة هنا للتحقق الفوري..." rows="3"></textarea>
+      <button id="verifyBtn" class="action-btn">فحص المصداقية الآن</button>
+
+      <!-- Verification Result Box -->
+      <div class="result-box hidden" id="resultBox">
+        <div class="result-header" id="resultHeader">
+          <span class="result-icon" id="resultIcon"></span>
+          <span class="result-title" id="resultTitle"></span>
+        </div>
+        <p class="result-desc" id="resultDesc"></p>
+      </div>
+    </div>
+
+    <!-- Toggle Protection -->
+    <div class="toggle-row">
+      <span>تفعيل حماية المتصفح التلقائية:</span>
+      <label class="switch">
+        <input type="checkbox" id="protectionToggle" checked>
+        <span class="slider round"></span>
+      </label>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <span>ShieldCode Protocol v2.2.0</span>
+      <a href="http://localhost:3000" target="_blank" class="footer-link">بوابة المؤسسات</a>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
