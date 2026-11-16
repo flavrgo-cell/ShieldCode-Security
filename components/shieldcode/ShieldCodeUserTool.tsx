@@ -21,6 +21,9 @@ import {
   Radio,
   Send,
   RefreshCw,
+  Phone,
+  ShieldCheck,
+  CheckCircle,
 } from "lucide-react";
 import {
   ALGERIAN_BANKS_DATABASE,
@@ -40,8 +43,17 @@ export interface ShieldCodeUserToolProps {
   className?: string;
 }
 
+const COUNTRY_CODES = [
+  { code: "+213", label: "🇩🇿 الجزائر (+213)", defaultLength: 9 },
+  { code: "+33", label: "🇫🇷 فرنسا (+33)", defaultLength: 9 },
+  { code: "+1", label: "🇺🇸 أمريكا / كندا (+1)", defaultLength: 10 },
+  { code: "+971", label: "🇦🇪 الإمارات (+971)", defaultLength: 9 },
+  { code: "+966", label: "🇸🇦 السعودية (+966)", defaultLength: 9 },
+  { code: "+44", label: "🇬🇧 بريطانيا (+44)", defaultLength: 10 },
+];
+
 export function ShieldCodeUserTool({
-  userId = "0555123456",
+  userId = "user_account_01",
   defaultView = "responsive",
   allowViewSwitch = true,
   onCodeUpdated,
@@ -50,12 +62,23 @@ export function ShieldCodeUserTool({
   const [viewMode, setViewMode] = useState<"responsive" | "mobile" | "desktop">(defaultView);
 
   // Form Fields
-  const [phone, setPhone] = useState(userId.startsWith("0") ? userId : "0555123456");
+  const [countryCode, setCountryCode] = useState("+213");
+  const [phone, setPhone] = useState("0555123456");
   const [selectedBankId, setSelectedBankId] = useState("algerie-poste");
   const [accountNumber, setAccountNumber] = useState("");
   const [code, setCode] = useState("SECURE2026");
   const [enabled, setEnabled] = useState(true);
   const [showCode, setShowCode] = useState(false);
+
+  // Twilio OTP Verification States
+  const [isPhoneVerified, setIsPhoneVerified] = useState(false);
+  const [otpStep, setOtpStep] = useState<"idle" | "sent" | "verified">("idle");
+  const [otpInput, setOtpInput] = useState("");
+  const [otpLoading, setOtpLoading] = useState(false);
+  const [otpError, setOtpError] = useState("");
+  const [otpSuccessMsg, setOtpSuccessMsg] = useState("");
+  const [otpDevHint, setOtpDevHint] = useState("");
+  const [remainingAttempts, setRemainingAttempts] = useState(3);
 
   // Status & Feedback
   const [saving, setSaving] = useState(false);
@@ -66,13 +89,9 @@ export function ShieldCodeUserTool({
   const [detectedTelecom, setDetectedTelecom] = useState<AlgerianTelecomOperator | null>(null);
   const [selectedBank, setSelectedBank] = useState<AlgerianBank>(ALGERIAN_BANKS_DATABASE[1]);
 
-  // Channels
-  const [channels, setChannels] = useState({
-    sms: true,
-    email: true,
-    push: true,
-    receipt: false,
-  });
+  // Secure SMS Testing
+  const [sendingSecureSms, setSendingSecureSms] = useState(false);
+  const [secureSmsResult, setSecureSmsResult] = useState<any>(null);
 
   // Test Verifier
   const [testInput, setTestInput] = useState("");
@@ -81,24 +100,137 @@ export function ShieldCodeUserTool({
     message: string;
   }>({ status: null, message: "" });
 
-  // Live Simulated SMS Sending test
-  const [simulatedRoute, setSimulatedRoute] = useState<any>(null);
-
-  // Effect: Auto-detect carrier when phone changes
+  // Auto-detect carrier when phone changes
   useEffect(() => {
     const carrier = detectAlgerianTelecom(phone);
     setDetectedTelecom(carrier);
   }, [phone]);
 
-  // Effect: Update selected bank details
+  // Update selected bank details
   useEffect(() => {
     const bank = detectAlgerianBank(selectedBankId);
     if (bank) setSelectedBank(bank);
   }, [selectedBankId]);
 
-  // Validation
   const validation = defaultShieldCode.validateCode(code);
 
+  // Formatted E.164 phone
+  const getFullE164 = () => {
+    let clean = phone.replace(/[\s\-\(\)]/g, "");
+    if (clean.startsWith("+")) return clean;
+    if (clean.startsWith("0") && countryCode === "+213") {
+      clean = clean.slice(1);
+    }
+    return countryCode + clean;
+  };
+
+  // 1. Request Twilio OTP
+  const handleRequestOTP = async () => {
+    setOtpLoading(true);
+    setOtpError("");
+    setOtpSuccessMsg("");
+    setOtpDevHint("");
+
+    try {
+      const fullPhone = getFullE164();
+      const res = await fetch("/api/phone/send-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          phone: fullPhone,
+          userId,
+          antiPhishingCode: code,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "فشل إرسال رمز التحقق عبر مزود Twilio");
+      }
+
+      setOtpStep("sent");
+      setOtpSuccessMsg(data.message || "تم إرسال كود التحقق OTP إلى هاتفك!");
+      if (data.devHint) {
+        setOtpDevHint(data.devHint);
+      }
+    } catch (err: any) {
+      setOtpError(err.message || "حدث خطأ أثناء إرسال الرمز");
+    } finally {
+      setOtpLoading(false);
+    }
+  };
+
+  // 2. Verify Twilio OTP
+  const handleVerifyOTP = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!otpInput.trim() || otpInput.trim().length !== 6) {
+      setOtpError("يرجى إدخال رمز التحقق المكون من 6 أرقام");
+      return;
+    }
+
+    setOtpLoading(true);
+    setOtpError("");
+    try {
+      const fullPhone = getFullE164();
+      const res = await fetch("/api/phone/verify-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          phone: fullPhone,
+          otp: otpInput.trim(),
+          userId,
+          antiPhishingCode: code,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        if (data.remainingAttempts !== undefined) {
+          setRemainingAttempts(data.remainingAttempts);
+        }
+        throw new Error(data.error || "فشل التحقق من الرمز");
+      }
+
+      setIsPhoneVerified(true);
+      setOtpStep("verified");
+      setOtpSuccessMsg("✓ تم توثيق رقم الهاتف بنجاح وربطه برمز مكافحة التصيد!");
+    } catch (err: any) {
+      setOtpError(err.message || "رمز التحقق غير صحيح");
+    } finally {
+      setOtpLoading(false);
+    }
+  };
+
+  // 3. Send Official Secure SMS alert via Twilio
+  const handleSendSecureSMS = async () => {
+    setSendingSecureSms(true);
+    setSecureSmsResult(null);
+    try {
+      const fullPhone = getFullE164();
+      const res = await fetch("/api/notifications/send-secure-sms", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          phone: fullPhone,
+          userId,
+          messageBody: `${selectedBank.shortName}: تم تسجيل الدخول إلى حسابك المالي بنجاح من جهاز جديد. إذا لم تكن أنت، يرجى تجميد الحساب فوراً.`,
+          customSender: selectedBank.shortName,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "فشل إرسال الإشعار المحمي");
+      }
+      setSecureSmsResult(data);
+    } catch (err: any) {
+      alert(err.message || "فشل إرسال الرسالة");
+    } finally {
+      setSendingSecureSms(false);
+    }
+  };
+
+  // Save Settings
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg("");
@@ -110,12 +242,12 @@ export function ShieldCodeUserTool({
 
     setSaving(true);
     try {
-      // Call Live Algerian API
+      const fullPhone = getFullE164();
       const res = await fetch("/api/v1/algeria/link-account", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          phone: phone.trim(),
+          phone: fullPhone,
           bankId: selectedBankId,
           code: code.trim(),
           accountNumber: accountNumber.trim(),
@@ -125,10 +257,10 @@ export function ShieldCodeUserTool({
 
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.error || "فشل حفظ البيانات في قاعدة البيانات الحية");
+        throw new Error(data.error || "فشل حفظ البيانات");
       }
 
-      defaultShieldCode.setCode(phone.trim(), code.trim(), enabled);
+      defaultShieldCode.setCode(fullPhone, code.trim(), enabled);
       setSavedSuccess(true);
       if (onCodeUpdated) {
         onCodeUpdated(code.trim(), enabled);
@@ -141,31 +273,12 @@ export function ShieldCodeUserTool({
     }
   };
 
-  const handleSendTestOTP = async () => {
-    try {
-      const res = await fetch("/api/v1/algeria/route-notification", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          phone,
-          bankId: selectedBankId,
-          rawMessage: `رمز تأكيد المعاملة المالية OTP هو: ${Math.floor(100000 + Math.random() * 900000)}. صالح لمدة 5 دقائق.`,
-          channel: "sms",
-        }),
-      });
-      const data = await res.json();
-      setSimulatedRoute(data);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
   const handleVerifyTest = (e: React.FormEvent) => {
     e.preventDefault();
     if (!testInput.trim()) return;
 
     const result = defaultShieldCode.verifyMessage({
-      userId: phone,
+      userId: getFullE164(),
       fullMessageText: testInput,
       providedCode: code,
     });
@@ -173,12 +286,12 @@ export function ShieldCodeUserTool({
     if (result.isAuthentic) {
       setTestResult({
         status: "verified",
-        message: `✅ موثق وأصلي! الرسالة تحتوي على رمزك السري [${code}]. وهي صادرة من خوادم ${selectedBank.nameAr} عبر شبكة ${detectedTelecom ? detectedTelecom.companyName : "الهاتف الجزائري"}.`,
+        message: `✅ موثق وأصلي! الرسالة تحتوي على رمزك السري [${code}]. وهي صادرة من المؤسسة الحقيقية عبر شبكة الهاتف الرسمية.`,
       });
     } else {
       setTestResult({
         status: "phishing",
-        message: `🚨 إنذار تصيد خطير: الرسالة لا تحتوي على رمزك الشخصي [${code}]. لا تضغط على أي رابط فهذه رسالة مزورة تنتحل اسم ${selectedBank.shortName}!`,
+        message: `🚨 إنذار تصيد خطير: الرسالة لا تحتوي على رمزك [${code}]. هذه محاولة احتيال وانتحال هوية!`,
       });
     }
   };
@@ -229,7 +342,7 @@ export function ShieldCodeUserTool({
       <div
         className={`transition-all duration-300 w-full ${
           isMobileFrame
-            ? "max-w-[410px] rounded-[36px] p-4 bg-slate-950 border-[6px] border-slate-800 shadow-2xl"
+            ? "max-w-[420px] rounded-[36px] p-4 bg-slate-950 border-[6px] border-slate-800 shadow-2xl"
             : "max-w-3xl rounded-2xl p-6 bg-slate-900/90 border border-slate-800 shadow-xl"
         }`}
       >
@@ -262,19 +375,26 @@ export function ShieldCodeUserTool({
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-base font-bold text-white">
-                  رمز مكافحة التصيد (ShieldCode DZ)
+                  رمز مكافحة التصيد (ShieldCode)
                 </h3>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-teal-500/20 text-teal-300 border border-teal-500/30 font-semibold">
-                  قاعدة البيانات الحية
-                </span>
+                {isPhoneVerified ? (
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold flex items-center gap-1">
+                    <CheckCircle className="w-3 h-3" />
+                    هاتف موثق بـ Twilio OTP
+                  </span>
+                ) : (
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 font-semibold">
+                    يتطلب توثيق الهاتف
+                  </span>
+                )}
               </div>
               <p className="text-xs text-slate-400 mt-0.5">
-                حماية الحسابات البنكية والبريدية الجزائرية عبر متعاملي الهاتف النقال (موبيليس، جيزي، أوريدو).
+                حماية الحسابات والمراسلات المالية عبر تفعيل الرمز وتوثيق رقم الهاتف عبر Twilio SMS.
               </p>
             </div>
           </div>
 
-          {/* Toggle Switch */}
+          {/* Protection Toggle */}
           <div className="flex items-center gap-2 flex-shrink-0">
             <span className="text-xs font-semibold text-slate-300">
               {enabled ? "مفعّل" : "معطّل"}
@@ -295,13 +415,119 @@ export function ShieldCodeUserTool({
           </div>
         </div>
 
-        {/* Form Body */}
+        {/* SECTION 1: Phone Verification via Twilio OTP */}
+        <div className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800/90 mb-5 space-y-3">
+          <div className="flex items-center justify-between">
+            <label className="text-xs font-bold text-slate-200 flex items-center gap-1.5">
+              <Phone className="w-4 h-4 text-teal-400" />
+              توثيق رقم الهاتف عبر خدمة Twilio SMS:
+            </label>
+            {isPhoneVerified && (
+              <span className="text-[11px] text-emerald-400 font-bold flex items-center gap-1">
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                تم التوثيق بنجاح
+              </span>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-12 gap-2">
+            {/* Country Selector */}
+            <div className="sm:col-span-4">
+              <select
+                value={countryCode}
+                onChange={(e) => setCountryCode(e.target.value)}
+                disabled={isPhoneVerified}
+                className="w-full bg-slate-900 border border-slate-800 rounded-xl px-2 py-2 text-xs text-white focus:outline-none focus:border-teal-500 disabled:opacity-60"
+              >
+                {COUNTRY_CODES.map((c) => (
+                  <option key={c.code} value={c.code}>
+                    {c.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Phone Input */}
+            <div className="sm:col-span-8 flex gap-2">
+              <input
+                type="text"
+                value={phone}
+                onChange={(e) => {
+                  setPhone(e.target.value);
+                  setIsPhoneVerified(false);
+                  setOtpStep("idle");
+                }}
+                disabled={isPhoneVerified}
+                placeholder="0555 12 34 56"
+                className="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-teal-500 disabled:opacity-60"
+                dir="ltr"
+              />
+              {!isPhoneVerified && (
+                <button
+                  type="button"
+                  onClick={handleRequestOTP}
+                  disabled={otpLoading}
+                  className="px-3 py-2 rounded-xl bg-teal-500 hover:bg-teal-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition-all shadow-md shadow-teal-500/20 active:scale-95 disabled:opacity-50 whitespace-nowrap"
+                >
+                  {otpLoading ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
+                  {otpStep === "sent" ? "إعادة إرسال" : "طلب كود OTP"}
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* OTP Verification Input Form */}
+          {otpStep === "sent" && !isPhoneVerified && (
+            <form onSubmit={handleVerifyOTP} className="pt-2 border-t border-slate-800/60 space-y-2 animate-fadeIn">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                <input
+                  type="text"
+                  maxLength={6}
+                  value={otpInput}
+                  onChange={(e) => setOtpInput(e.target.value.replace(/\D/g, ""))}
+                  placeholder="أدخل رمز الـ 6 أرقام (OTP)"
+                  className="flex-1 bg-slate-900 border border-teal-500/50 rounded-xl px-3 py-2 text-center text-sm font-mono tracking-[0.3em] font-bold text-teal-300 focus:outline-none"
+                  dir="ltr"
+                />
+                <button
+                  type="submit"
+                  disabled={otpLoading || otpInput.length !== 6}
+                  className="px-4 py-2 rounded-xl bg-gradient-to-r from-teal-500 to-cyan-500 text-slate-950 font-bold text-xs disabled:opacity-50 transition-opacity"
+                >
+                  {otpLoading ? "جارِ التحقق..." : "تأكيد الرمز وتوثيق الهاتف"}
+                </button>
+              </div>
+
+              {otpDevHint && (
+                <div className="text-[11px] font-mono text-cyan-300 bg-cyan-950/40 p-2 rounded-lg border border-cyan-800/40" dir="ltr">
+                  💡 {otpDevHint} (ينتهي خلال 5 دقائق)
+                </div>
+              )}
+            </form>
+          )}
+
+          {otpSuccessMsg && (
+            <p className="text-xs text-emerald-400 flex items-center gap-1 animate-fadeIn">
+              <CheckCircle2 className="w-3.5 h-3.5" />
+              {otpSuccessMsg}
+            </p>
+          )}
+
+          {otpError && (
+            <p className="text-xs text-rose-400 flex items-center gap-1 animate-fadeIn">
+              <AlertTriangle className="w-3.5 h-3.5" />
+              {otpError}
+            </p>
+          )}
+        </div>
+
+        {/* SECTION 2: Anti-Phishing Code & Institution Configuration */}
         <form onSubmit={handleSave} className="space-y-4">
-          {/* Algerian Bank / Postal Selector */}
+          {/* Bank / Institution Selector */}
           <div>
             <label className="block text-xs font-semibold text-slate-300 mb-1.5 flex items-center gap-1.5">
               <Building className="w-3.5 h-3.5 text-teal-400" />
-              اختر البنك أو المؤسسة المالية الجزائرية:
+              المؤسسة المصرفية أو البريدية التابع لها الحساب:
             </label>
             <select
               value={selectedBankId}
@@ -316,66 +542,10 @@ export function ShieldCodeUserTool({
             </select>
           </div>
 
-          {/* Algerian Phone Number + Live Carrier Auto-Detection */}
-          <div>
-            <div className="flex items-center justify-between mb-1.5">
-              <label className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
-                <Smartphone className="w-3.5 h-3.5 text-teal-400" />
-                رقم الهاتف النقال الجزائري:
-              </label>
-
-              {/* Detected Operator Badge */}
-              {detectedTelecom ? (
-                <span
-                  className="text-[10px] px-2.5 py-0.5 rounded-full font-bold flex items-center gap-1 border animate-fadeIn"
-                  style={{
-                    backgroundColor: detectedTelecom.bgLight,
-                    color: detectedTelecom.color,
-                    borderColor: detectedTelecom.color,
-                  }}
-                >
-                  <Radio className="w-3 h-3" />
-                  متعامل: {detectedTelecom.companyName} ({detectedTelecom.carrierCode})
-                </span>
-              ) : (
-                <span className="text-[10px] text-slate-500">أدخل (05 / 06 / 07) لكشف المتعامل تلقائياً</span>
-              )}
-            </div>
-
-            <div className="relative">
-              <input
-                type="text"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="مثال: 0555123456 أو 0661998877 أو 0770112233"
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl pr-3 pl-24 py-2.5 text-xs text-white font-mono focus:outline-none focus:border-teal-500"
-                dir="ltr"
-              />
-              <div className="absolute left-2 top-1/2 -translate-y-1/2 text-[10px] text-slate-400 font-mono bg-slate-900 px-2 py-1 rounded-md border border-slate-800">
-                +213 DZ
-              </div>
-            </div>
-          </div>
-
-          {/* Account / RIP / CCP / CIB Card (Optional) */}
-          <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">
-              رقم الحساب البريدي / البنكي (RIP / CCP / CIB):
-            </label>
-            <input
-              type="text"
-              value={accountNumber}
-              onChange={(e) => setAccountNumber(e.target.value)}
-              placeholder="مثال: 00799999001234567890 (أو رقم بطاقة CIB / الذهبية)"
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-white placeholder-slate-600 focus:outline-none focus:border-teal-500"
-              dir="ltr"
-            />
-          </div>
-
           {/* Secret Anti-Phishing Code */}
           <div>
             <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-              رمز مكافحة التصيد السري الخاص بك:
+              رمز مكافحة التصيد السري الخاص بك (Anti-Phishing Code):
             </label>
             <div className="relative">
               <div className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400">
@@ -428,58 +598,58 @@ export function ShieldCodeUserTool({
               className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-teal-500 hover:bg-teal-400 text-slate-950 font-bold text-xs transition-all shadow-lg shadow-teal-500/20 active:scale-95 disabled:opacity-50"
             >
               {saving ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-              حفظ وتوثيق الرمز في الشبكة الوطنية
+              حفظ وتأمين الحساب
             </button>
 
             {savedSuccess && (
               <span className="text-xs text-teal-400 font-semibold flex items-center gap-1 animate-fadeIn">
                 <CheckCircle2 className="w-4 h-4" />
-                تم التوثيق في قاعدة البيانات الحية!
+                تم حفظ وتحديث الإعدادات بنجاح!
               </span>
             )}
           </div>
         </form>
 
-        {/* Live Message Preview Routed via Algerian Telecom */}
+        {/* SECTION 3: Official Secure SMS Dispatch Testing via Twilio */}
         <div className="mt-6 pt-5 border-t border-slate-800">
           <div className="flex items-center justify-between mb-2">
             <h4 className="text-xs font-bold text-slate-300 flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5 text-teal-400" />
-              معاينة الإشعار الصادر عبر بوابة {selectedBank.shortName} وشبكة {detectedTelecom ? detectedTelecom.companyName : "المتعامل"}:
+              اختبار إرسال إشعار رسمي آمن عبر Twilio SMS:
             </h4>
             <button
-              onClick={handleSendTestOTP}
+              onClick={handleSendSecureSMS}
+              disabled={sendingSecureSms || !phone}
               type="button"
-              className="flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-teal-300 border border-teal-500/30 font-semibold"
+              className="flex items-center gap-1 text-[11px] px-3 py-1.5 rounded-lg bg-teal-500/15 hover:bg-teal-500/25 text-teal-300 border border-teal-500/30 font-semibold transition-colors disabled:opacity-50"
             >
-              <Send className="w-3 h-3" />
-              اختبار توليد OTP حي
+              {sendingSecureSms ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
+              إرسال إشعار رسمي لهاتفي
             </button>
           </div>
 
           <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-300 font-sans leading-relaxed">
-            {/* Header / Sender ID */}
             <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-800/60 text-[11px]">
               <span className="font-bold text-white flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
                 المرسل: {selectedBank.smsSenderId}
               </span>
               <span className="text-slate-400 font-mono">
-                عبر {detectedTelecom ? detectedTelecom.companyName : "SMS Gateway"} ({detectedTelecom?.smscCenter || "SMSC"})
+                مزود الخدمة: Twilio SMS Gateway
               </span>
             </div>
 
             {enabled ? (
               <>
                 <div className="font-mono text-teal-400 font-bold text-sm mb-1 pb-1">
-                  [رمزك: {code || "••••"}]
+                  [رمزك الأمني: {code || "••••"}]
                 </div>
                 <p className="text-slate-300">
-                  {simulatedRoute ? simulatedRoute.protectedMessage.replace(/^\[.*?\]\n?/, '') : `${selectedBank.shortName}: رمز التحقق OTP لتأكيد العملية هو 884102. صالح لمدة 5 دقائق.`}
+                  {selectedBank.shortName}: تم تسجيل الدخول إلى حسابك المالي بنجاح. إذا لم تكن أنت، يرجى تجميد الحساب فوراً.
                 </p>
                 <div className="text-[10px] text-teal-400/80 mt-2 flex items-center gap-1">
                   <CheckCircle2 className="w-3 h-3" />
-                  إذا لم تجد الرمز [{code}] في بداية الرسالة، فهذه محاولة احتيال وانتحال هوية!
+                  محمي برمز مكافحة التصيد — إذا لم يطابق الرمز أعلاه رمزك الشخصي فهذه رسالة احتيالية!
                 </div>
               </>
             ) : (
@@ -487,19 +657,26 @@ export function ShieldCodeUserTool({
                 ⚠️ الحماية معطلة. الرسائل ستصلك دون رمز مكافحة التصيد!
               </p>
             )}
+
+            {secureSmsResult && (
+              <div className="mt-3 pt-2 border-t border-slate-800/60 text-[11px] font-mono text-emerald-400 space-y-1">
+                <div>✓ تم الإرسال عبر Twilio: {secureSmsResult.messageId}</div>
+                <div className="text-slate-400 text-[10px]">إلى: {secureSmsResult.to}</div>
+              </div>
+            )}
           </div>
         </div>
 
         {/* Message Verifier */}
         <div className="mt-5 pt-4 border-t border-slate-800">
           <h4 className="text-xs font-bold text-slate-300 mb-2">
-            فحص فوري لأي رسالة SMS أو إيميل وارد للتأكد من أصالته:
+            فحص فوري لأي رسالة واردة مشكوك فيها:
           </h4>
           <form onSubmit={handleVerifyTest} className="space-y-2">
             <textarea
               value={testInput}
               onChange={(e) => setTestInput(e.target.value)}
-              placeholder="الصق نص الرسالة الواردة للتأكد هل هي صادرة من بنكك الحقيقي أم من محتال..."
+              placeholder="الصق نص الرسالة الواردة للتأكد هل تحتوي على رمزك السري المشترك أم لا..."
               rows={2}
               className="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-teal-500"
             />

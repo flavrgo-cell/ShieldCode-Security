@@ -1,0 +1,40 @@
+{
+  "citizens": {
+    "+213555123456": {
+      "id": "+213555123456",
+      "phone_number": "+213555123456",
+      "is_phone_verified": true,
+      "anti_phishing_code": "SECURE2026",
+      "bankId": "algerie-poste",
+      "registeredAt": 1794854305402,
+      "updatedAt": 1794854305402,
+      "totalProtectedMessages": 1,
+      "lastUsedAt": 1794854316118
+    }
+  },
+  "auditLogs": [
+    {
+      "phone": "+213555123456",
+      "telecom": "twilio_carrier",
+      "bankId": "algerie-poste",
+      "bankName": "ShieldCode Enterprise",
+      "channel": "sms",
+      "codeInjected": "SECURE2026",
+      "rawText": "تم إجراء عملية شراء بقيمة 5000 دج",
+      "protectedText": "[Security Code: SECURE2026]\nتم إجراء عملية شراء بقيمة 5000 دج",
+      "status": "delivered",
+      "twilioSid": "SM_mock_secure_1794854316112",
+      "id": "sc_audit_1794854316118_29zq9",
+      "timestamp": 1794854316118
+    }
+  ],
+  "systemStats": {
+    "totalBanksIntegrated": 18,
+    "totalTelecomsActive": 3,
+    "totalProtectedAlerts": 1,
+    "phishingAttemptsBlocked": 0,
+    "lastHeartbeat": 1794854316118,
+    "totalVerifiedPhones": 1
+  },
+  "otpStore": {}
+}
