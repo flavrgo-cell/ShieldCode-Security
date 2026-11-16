@@ -19,6 +19,7 @@ import {
   ArrowDownLeft,
   ArrowUpRight,
   ChevronLeft,
+  Landmark,
 } from "lucide-react";
 
 import { SMSInboxModal } from "@/components/sms-inbox-modal";
@@ -69,6 +70,12 @@ export default function DashboardPage() {
   ).slice(0, 3);
 
   const quickActions = [
+    {
+      icon: <Landmark size={22} />,
+      label: "بوابة SATIM الوطنية",
+      emoji: "🏛️",
+      href: "/dashboard/satim",
+    },
     {
       icon: <Send size={22} />,
       label: "تحويل فوري",
