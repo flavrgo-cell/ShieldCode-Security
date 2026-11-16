@@ -20,6 +20,7 @@ import {
   ArrowUpRight,
   ChevronLeft,
   Landmark,
+  Code2,
 } from "lucide-react";
 
 import { SMSInboxModal } from "@/components/sms-inbox-modal";
@@ -95,10 +96,10 @@ export default function DashboardPage() {
       href: "/dashboard/flexi",
     },
     {
-      icon: <ShoppingCart size={22} />,
-      label: "التسوق الآمن",
-      emoji: "🛒",
-      href: "/dashboard/shop",
+      icon: <Code2 size={22} />,
+      label: "أداة المؤسسات (SDK Tool)",
+      emoji: "⚙️",
+      href: "/tool",
     },
     {
       icon: <Settings size={22} />,

@@ -18,12 +18,11 @@ import { getCurrentUser, logout } from "@/lib/auth";
 
 const navItems = [
   { label: "الرئيسية", icon: Home, href: "/dashboard" },
-  { label: "أداة الربط (SDK Tool)", icon: Code2, href: "/tool" },
+  { label: "أداة المؤسسات (SDK Tool)", icon: Code2, href: "/tool" },
   { label: "بوابة SATIM الوطنية", icon: Landmark, href: "/dashboard/satim" },
-  { label: "التحويل", icon: Send, href: "/dashboard/transfer" },
-  { label: "الدفع", icon: CreditCard, href: "/dashboard/pay" },
-  { label: "المتجر", icon: ShoppingBag, href: "/dashboard/shop" },
-  { label: "الإعدادات", icon: Settings, href: "/dashboard/settings" },
+  { label: "إعدادات الأمان وحماية الحساب", icon: Settings, href: "/dashboard/settings" },
+  { label: "التحويل البنكي", icon: Send, href: "/dashboard/transfer" },
+  { label: "دفع الفواتير", icon: CreditCard, href: "/dashboard/pay" },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
