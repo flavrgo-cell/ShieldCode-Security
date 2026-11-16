@@ -12,11 +12,13 @@ import {
   Settings,
   LogOut,
   Landmark,
+  Code2,
 } from "lucide-react";
 import { getCurrentUser, logout } from "@/lib/auth";
 
 const navItems = [
   { label: "الرئيسية", icon: Home, href: "/dashboard" },
+  { label: "أداة الربط (SDK Tool)", icon: Code2, href: "/tool" },
   { label: "بوابة SATIM الوطنية", icon: Landmark, href: "/dashboard/satim" },
   { label: "التحويل", icon: Send, href: "/dashboard/transfer" },
   { label: "الدفع", icon: CreditCard, href: "/dashboard/pay" },

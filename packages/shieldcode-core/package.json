@@ -1,0 +1,29 @@
+{
+  "name": "@shieldcode/security",
+  "version": "2.1.0",
+  "description": "Universal Anti-Phishing Security Tool & SDK for Financial Platforms & Banking Systems",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  },
+  "keywords": [
+    "anti-phishing",
+    "security",
+    "banking",
+    "fintech",
+    "algeria",
+    "satim",
+    "baridimob",
+    "fraud-prevention",
+    "otp-verification",
+    "smishing-protection"
+  ],
+  "author": "ShieldCode Security Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/flavrgo-cell/ShieldCode-Security.git"
+  }
+}
