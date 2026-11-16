@@ -178,6 +178,9 @@ sendSms($userPhone, $result['protectedMessage']);
             <Link href="/" className="text-slate-300 hover:text-white transition-colors">
               الرئيسية
             </Link>
+            <Link href="/algeria" className="text-slate-300 hover:text-white transition-colors">
+              بنوك ومتعاملو الجزائر
+            </Link>
             <Link href="/extension" className="text-slate-300 hover:text-white transition-colors">
               إضافة المتصفح
             </Link>

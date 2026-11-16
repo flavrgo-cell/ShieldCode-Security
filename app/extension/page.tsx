@@ -82,6 +82,9 @@ export default function ExtensionPage() {
             <Link href="/" className="text-slate-300 hover:text-white transition-colors">
               الرئيسية
             </Link>
+            <Link href="/algeria" className="text-slate-300 hover:text-white transition-colors">
+              بنوك ومتعاملو الجزائر
+            </Link>
             <Link href="/user-tool" className="text-slate-300 hover:text-white transition-colors">
               أداة الحساب (هاتف وحاسوب)
             </Link>

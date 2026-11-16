@@ -109,13 +109,17 @@ export default function HomePage() {
           </Link>
 
           <nav className="hidden md:flex items-center gap-6 text-xs font-semibold">
-            <Link href="/extension" className="text-slate-300 hover:text-white transition-colors flex items-center gap-1.5">
-              <Chrome className="w-3.5 h-3.5 text-teal-400" />
-              إضافة المتصفح
+            <Link href="/algeria" className="text-slate-300 hover:text-white transition-colors flex items-center gap-1.5">
+              <Building className="w-3.5 h-3.5 text-teal-400" />
+              بنوك ومتعاملو الجزائر
             </Link>
             <Link href="/user-tool" className="text-slate-300 hover:text-white transition-colors flex items-center gap-1.5">
               <Smartphone className="w-3.5 h-3.5 text-teal-400" />
               أداة الحساب (هاتف وحاسوب)
+            </Link>
+            <Link href="/extension" className="text-slate-300 hover:text-white transition-colors flex items-center gap-1.5">
+              <Chrome className="w-3.5 h-3.5 text-teal-400" />
+              إضافة المتصفح
             </Link>
             <Link href="/enterprise" className="text-slate-300 hover:text-white transition-colors flex items-center gap-1.5">
               <Building className="w-3.5 h-3.5 text-teal-400" />
