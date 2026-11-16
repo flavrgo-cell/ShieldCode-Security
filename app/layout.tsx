@@ -1,15 +1,18 @@
-import React from "react"
+import React from 'react'
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/next'
+import { Cairo } from 'next/font/google'
 import './globals.css'
 
-const _geist = Geist({ subsets: ["latin"] });
-const _geistMono = Geist_Mono({ subsets: ["latin"] });
+const cairo = Cairo({
+  subsets: ['arabic', 'latin'],
+  weight: ['300', '400', '500', '600', '700', '800'],
+  variable: '--font-cairo',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
-  title: 'SecurePay Gateway - Anti-Phishing Payment Verification',
-  description: 'Protect your payments with real-time identity verification. SecurePay Gateway prevents unauthorized transactions through selfie verification and email confirmation.',
+  title: 'BaridiPay - بنك رقمي جزائري',
+  description: 'منصة BaridiPay - الخدمات المصرفية الرقمية الجزائرية مع حماية ShieldCode من التصيد الاحتيالي',
   generator: 'v0.app',
   icons: {
     icon: [
@@ -36,10 +39,9 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body className={`font-sans antialiased`}>
+    <html lang="ar" dir="rtl">
+      <body className={`${cairo.variable} font-sans antialiased`}>
         {children}
-        <Analytics />
       </body>
     </html>
   )

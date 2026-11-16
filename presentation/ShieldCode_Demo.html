@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShieldCode — رمز مكافحة التصيد الاحتيالي</title>
+<style>
+  :root {
+    --bg: #0a1628; --panel: #0f2040; --panel2: #13294f;
+    --teal: #00b4a0; --teal2: #007a6e; --text: #ffffff;
+    --muted: #8da0b8; --soft: #c8d8ea; --red: #ef4444;
+    --amber: #f5a623; --green: #34d399;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: "Segoe UI", Tahoma, "Noto Kufi Arabic", Arial, sans-serif;
+    background: radial-gradient(circle at 15% 0%, #14325e 0%, var(--bg) 55%);
+    color: var(--text); overflow: hidden;
+  }
+  button { font-family: inherit; cursor: pointer; }
+  .app { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+
+  /* ===== Header ===== */
+  header {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 12px 28px; border-bottom: 1px solid rgba(0,180,160,.18);
+  }
+  .brand { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 22px; }
+  .brand .logo {
+    width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; font-size: 24px;
+    background: linear-gradient(135deg, var(--teal), var(--teal2));
+  }
+  .brand small { display: block; font-size: 12px; color: var(--muted); font-weight: 400; }
+  .steps { display: flex; gap: 8px; }
+  .step-dot {
+    display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 999px;
+    background: var(--panel); color: var(--muted); border: 1px solid transparent; font-size: 15px; transition: .25s;
+  }
+  .step-dot b {
+    width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center;
+    background: rgba(255,255,255,.08); font-size: 13px;
+  }
+  .step-dot.active { color: #fff; border-color: var(--teal); background: rgba(0,180,160,.15); }
+  .step-dot.active b { background: var(--teal); }
+  .step-dot.done b { background: var(--teal2); color: #fff; }
+  .tools { display: flex; gap: 6px; }
+  .tools button {
+    background: var(--panel); color: var(--soft); border: 1px solid rgba(255,255,255,.08);
+    border-radius: 10px; padding: 8px 12px; font-size: 13px;
+  }
+  .tools button:hover { border-color: var(--teal); }
+
+  /* ===== Main stage ===== */
+  main {
+    flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr auto;
+    gap: 36px; padding: 22px 40px; align-items: center;
+  }
+  .panel { max-width: 780px; }
+  .kicker { color: var(--teal); font-weight: 700; font-size: clamp(14px, 1.2vw, 18px); margin-bottom: 6px; letter-spacing: .5px; }
+  .panel h1 { font-size: clamp(28px, 3.2vw, 48px); line-height: 1.25; margin-bottom: 14px; }
+  .lead { font-size: clamp(16px, 1.5vw, 23px); line-height: 1.8; color: var(--soft); margin-bottom: 18px; }
+  .lead mark, .hl {
+    background: rgba(0,180,160,.2); color: #5eead4; padding: 0 8px; border-radius: 6px; font-weight: 800;
+    unicode-bidi: isolate;
+  }
+  .card {
+    background: var(--panel); border: 1px solid rgba(255,255,255,.07); border-radius: 18px;
+    padding: 16px 20px; margin-bottom: 14px; font-size: clamp(15px, 1.2vw, 18px); line-height: 1.8;
+  }
+  .card.ok { border-color: rgba(0,180,160,.6); background: linear-gradient(135deg, #064e3b, #022c22); }
+  .card.bad { border-color: rgba(239,68,68,.6); background: linear-gradient(135deg, #4c0f0f, #2a0808); }
+  .card.warn { border-color: rgba(245,166,35,.6); background: linear-gradient(135deg, #4a2c00, #2a1800); }
+  .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .btn {
+    border: none; border-radius: 14px; padding: 13px 20px; font-size: clamp(14px, 1.25vw, 18px); font-weight: 700;
+    color: #fff; background: linear-gradient(135deg, var(--teal), var(--teal2));
+    box-shadow: 0 6px 20px rgba(0,180,160,.25); transition: transform .15s, opacity .15s;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn:active { transform: translateY(0); }
+  .btn:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+  .btn.red { background: linear-gradient(135deg, #ef4444, #991b1b); box-shadow: 0 6px 20px rgba(239,68,68,.25); }
+  .btn.ghost { background: var(--panel2); box-shadow: none; color: var(--soft); }
+  .crumb { font-size: 13px; color: var(--muted); margin-bottom: 10px; }
+  .crumb b { color: var(--soft); }
+  .code-input {
+    flex: 1; min-width: 200px; background: #071022; border: 2px solid rgba(0,180,160,.5); color: #fff;
+    border-radius: 14px; padding: 10px 18px; font-size: clamp(20px, 2vw, 28px); font-weight: 800;
+    font-family: inherit; text-align: center; outline: none; letter-spacing: 1px;
+  }
+  .code-input:focus { border-color: var(--teal); box-shadow: 0 0 0 4px rgba(0,180,160,.2); }
+  .code-input.invalid { border-color: var(--red); }
+  .checks { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 10px; font-size: 14px; }
+  .checks span { color: var(--muted); }
+  .checks span.pass { color: var(--green); }
+  .flow { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: clamp(14px, 1.25vw, 18px); }
+  .flow .node { background: var(--panel2); border-radius: 12px; padding: 9px 13px; font-weight: 700; }
+  .flow .arrow { color: var(--teal); font-size: 22px; }
+  .rule { display: grid; grid-template-columns: auto 1fr; gap: 8px 14px; align-items: center; }
+  .counter { font-size: clamp(15px, 1.3vw, 19px); color: var(--soft); }
+  .counter b { color: #fca5a5; font-size: 1.4em; }
+  .nav { display: flex; gap: 10px; margin-top: 16px; }
+  .hint { color: var(--muted); font-size: 13px; margin-top: 10px; }
+
+  /* ===== Phone ===== */
+  .phone {
+    width: 380px; height: clamp(420px, calc(100vh - 150px), 700px);
+    border-radius: 46px; background: #05090f; border: 10px solid #1c2738;
+    box-shadow: 0 30px 80px rgba(0,0,0,.55), 0 0 0 2px #2a3a52, 0 0 60px rgba(0,180,160,.12);
+    display: flex; flex-direction: column; overflow: hidden; position: relative;
+  }
+  .status-bar { display: flex; justify-content: space-between; padding: 10px 22px 4px; font-size: 13px; color: var(--soft); direction: ltr; }
+  .notch { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 120px; height: 24px; background: #1c2738; border-radius: 0 0 16px 16px; }
+  .chat-head {
+    display: flex; align-items: center; gap: 10px; padding: 10px 16px 12px;
+    border-bottom: 1px solid rgba(255,255,255,.06); background: #0b1422;
+  }
+  .chat-head .avatar { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; background: #1e3a5f; font-size: 18px; }
+  .chat-head .name { font-weight: 700; font-size: 15px; }
+  .chat-head .sub { font-size: 11px; color: var(--muted); }
+  .chat-head .shield { margin-inline-start: auto; font-size: 11px; padding: 4px 8px; border-radius: 999px; white-space: nowrap; }
+  .shield.on { background: rgba(0,180,160,.18); color: #5eead4; }
+  .shield.off { background: rgba(245,166,35,.15); color: #fcd34d; }
+  .inbox { flex: 1; overflow-y: auto; padding: 14px 12px 20px; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth; }
+  .inbox::-webkit-scrollbar { width: 4px; }
+  .inbox::-webkit-scrollbar-thumb { background: #22324a; border-radius: 4px; }
+  .empty { margin: auto; color: var(--muted); font-size: 14px; text-align: center; line-height: 1.8; }
+  .sys { flex-shrink: 0; align-self: center; font-size: 12px; color: #5eead4; background: rgba(0,180,160,.12); padding: 6px 12px; border-radius: 999px; text-align: center; }
+
+  .msg {
+    width: 96%; flex-shrink: 0; align-self: flex-start; background: #1b2a41; border: 2px solid transparent;
+    border-radius: 18px 18px 18px 6px; padding: 10px 12px; font-size: 13.5px; line-height: 1.75; transition: border-color .4s, background .4s;
+  }
+  .msg.email { background: #f4f6fa; color: #1f2937; border-radius: 14px; padding: 0; overflow: hidden; }
+  .msg.pop { animation: pop .45s cubic-bezier(.2,1.4,.4,1); }
+  @keyframes pop { from { opacity: 0; transform: translateY(14px) scale(.96); } to { opacity: 1; transform: none; } }
+  .msg-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+  .msg-head .from { color: var(--soft); font-weight: 700; }
+  .chan { font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 999px; background: rgba(147,197,253,.15); color: #93c5fd; }
+  .msg.email .chan { background: #dbeafe; color: #1d4ed8; }
+  .email-top { padding: 8px 12px 6px; border-bottom: 1px solid #e5e7eb; background: #fff; }
+  .email-top .from { color: #111827; font-weight: 700; font-size: 12px; }
+  .email-top .addr { direction: ltr; unicode-bidi: isolate; color: #6b7280; font-size: 11px; }
+  .email-top .subj { font-weight: 800; font-size: 13px; color: #111827; margin-top: 2px; }
+  .email-body { padding: 8px 12px 10px; }
+  .email-banner {
+    margin: 8px 12px 0; padding: 6px 10px; border-radius: 8px; background: #ecfdf5; border: 1px dashed #10b981;
+    color: #065f46; font-size: 12px; font-weight: 700;
+  }
+  .email-banner b { font-size: 14px; unicode-bidi: isolate; }
+  .msg-label { display: inline-block; font-size: 11px; font-weight: 700; color: var(--amber); margin-bottom: 4px; }
+  .code-chip {
+    display: flex; width: fit-content; align-items: center; gap: 4px; background: rgba(0,180,160,.2); color: #5eead4;
+    border: 1px solid rgba(0,180,160,.55); border-radius: 8px; padding: 0 8px; font-weight: 800; margin-bottom: 4px;
+    animation: glow 1.6s ease-out 1; unicode-bidi: isolate;
+  }
+  @keyframes glow { 0% { box-shadow: 0 0 0 0 rgba(0,180,160,.8); } 100% { box-shadow: 0 0 0 12px rgba(0,180,160,0); } }
+  .link { color: #93c5fd; text-decoration: underline; direction: ltr; unicode-bidi: embed; }
+  .msg.email .link { color: #2563eb; }
+  .link.diff { background: rgba(239,68,68,.25); color: #fecaca; border-radius: 4px; padding: 0 3px; }
+  .link.same { background: rgba(52,211,153,.2); color: #a7f3d0; border-radius: 4px; padding: 0 3px; }
+  .msg.flagged { border-color: var(--red); background: rgba(239,68,68,.12); }
+  .msg.email.flagged { background: #fef2f2; }
+  .msg.shake { animation: shake .5s; }
+  .msg.trusted { border-color: rgba(0,180,160,.6); }
+  @keyframes shake { 0%,100% { transform: none; } 20% { transform: translateX(-6px); } 40% { transform: translateX(6px); } 60% { transform: translateX(-4px); } 80% { transform: translateX(4px); } }
+  .verdict { margin-top: 8px; padding: 6px 10px; border-radius: 10px; font-size: 12px; font-weight: 700; line-height: 1.6; }
+  .msg.email .verdict { margin: 0 12px 10px; }
+  .verdict.ok { background: rgba(52,211,153,.15); color: var(--green); }
+  .msg.email .verdict.ok { background: #d1fae5; color: #065f46; }
+  .verdict.bad { background: rgba(239,68,68,.2); color: #fca5a5; }
+  .msg.email .verdict.bad { background: #fee2e2; color: #b91c1c; }
+
+  /* ===== Speaker notes ===== */
+  .notes {
+    position: fixed; inset-inline: 0; bottom: 0; background: rgba(5,10,20,.96); border-top: 2px solid var(--amber);
+    padding: 14px 32px 18px; font-size: 18px; line-height: 1.9; color: #fde68a; transform: translateY(100%); transition: transform .3s; z-index: 10;
+  }
+  .notes.open { transform: none; }
+  .notes .t { font-size: 12px; color: var(--amber); font-weight: 700; margin-bottom: 4px; }
+
+  @media (max-height: 780px) {
+    main { padding-top: 12px; padding-bottom: 12px; }
+    .panel h1 { margin-bottom: 8px; }
+    .lead { margin-bottom: 10px; line-height: 1.65; }
+    .card { padding: 11px 16px; margin-bottom: 10px; }
+    .nav { margin-top: 10px; }
+  }
+  @media (max-width: 1100px) {
+    main { gap: 22px; padding: 16px 22px; }
+    .phone { width: 330px; }
+    .step-dot span { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand">
+      <div class="logo">🛡️</div>
+      <div>ShieldCode<small>رمز مكافحة التصيد الاحتيالي — Anti-Phishing Code</small></div>
+    </div>
+    <nav class="steps" id="steps"></nav>
+    <div class="tools">
+      <button id="btnNotes" title="مفتاح N">📝 ملاحظات</button>
+      <button id="btnFull" title="مفتاح F">⛶ ملء الشاشة</button>
+      <button id="btnReset" title="مفتاح R">↺ إعادة</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel" id="panel"></section>
+
+    <div class="phone" aria-label="هاتف المستخدم">
+      <div class="notch"></div>
+      <div class="status-bar"><span id="clock">09:41</span><span>📶 🔋</span></div>
+      <div class="chat-head">
+        <div class="avatar">📥</div>
+        <div>
+          <div class="name">الرسائل الواردة</div>
+          <div class="sub">SMS + البريد الإلكتروني</div>
+        </div>
+        <span class="shield off" id="shieldBadge">⚠️ بدون رمز</span>
+      </div>
+      <div class="inbox" id="inbox"></div>
+    </div>
+  </main>
+</div>
+
+<div class="notes" id="notes">
+  <div class="t">📝 ملاحظات المتحدث (لا تظهر إلا عند الضغط على N)</div>
+  <div id="notesText"></div>
+</div>
+
+<script>
+(() => {
+  "use strict";
+
+  const DEFAULT_CODE = "ايوب2026";
+  const PLATFORM = "BARIDIMOB";
+  const PLATFORM_EMAIL = "noreply@poste.dz";
+  const STEP_LABELS = ["المشكلة", "الحل", "التطبيق", "النتيجة"];
+
+  const NOTES = [
+    "سيداتي وسادتي أعضاء اللجنة، هذا هو النموذج التفاعلي لمشروع ShieldCode. المشكلة: يقع الضحايا في فخ التصيد لأن النص المكتوب في رسائل الهجوم يماثل تماماً نص الرسائل الرسمية للمنصات المالية، سواء عبر الرسائل النصية أو البريد الإلكتروني.",
+    "الحل: رمز مكافحة التصيد الاحتيالي. هو رمز ينشئه المستخدم بنفسه داخل حسابه المالي على المنصة، ويتكون من مجموعة من الحروف والأرقام يحددها هو، مثل '{code}'. هذا الرمز لا يعرفه إلا المستخدم والمنصة.",
+    "التطبيق: بمجرد تعيين الرمز، أصبحت جميع الرسائل النصية ورسائل البريد الإلكتروني الصادرة من المنصة تحمل هذا الرمز الشخصي، مما يساعد المستخدم على التعرف على الاتصالات الحقيقية.",
+    "النتيجة: إذا وصلت المستخدمَ أي رسالة تدّعي أنها من المنصة ولا تحمل الرمز [{code}]، فهي على الأرجح محاولة تصيد احتيالي، فيرفض التفاعل معها. وبهذا يضيف الرمز طبقة أمان إضافية لحساب المستخدم."
+  ];
+
+  // Step 1: two SMS that look identical — only the link domain differs.
+  const COMPARE = [
+    { kind: "sms", label: "الرسالة 1", truth: "fake", time: "09:40",
+      pre: "عميلنا العزيز، تم تعليق بطاقتك الذهبية مؤقتاً بسبب نشاط مشبوه. لإعادة التفعيل يرجى تأكيد بياناتك عبر الرابط: ",
+      link: "baridimob-poste.com/verify" },
+    { kind: "sms", label: "الرسالة 2", truth: "real", time: "09:41",
+      pre: "عميلنا العزيز، تم تعليق بطاقتك الذهبية مؤقتاً بسبب نشاط مشبوه. لإعادة التفعيل يرجى تأكيد بياناتك عبر الرابط: ",
+      link: "baridimob.poste.dz/verify" }
+  ];
+
+  const BANK_SMS = [
+    "تم خصم مبلغ 2,500.00 دج من حسابك البريدي مقابل عملية شراء. الرصيد المتاح: 45,250.00 دج.",
+    "رمز التحقق الخاص بعمليتك هو 482913. لا تشاركه مع أي شخص. الموقع الرسمي: baridimob.poste.dz",
+    "تم إيداع مبلغ 15,000.00 دج في حسابك البريدي عن طريق تحويل وارد.",
+    "تم شحن رصيد فليكسي بمبلغ 1,000.00 دج بنجاح. بريد الجزائر يشكركم لثقتكم."
+  ];
+  const BANK_EMAIL = [
+    { subj: "تأكيد عملية تحويل", text: "تم تنفيذ تحويل بمبلغ 8,000.00 دج من حسابك بنجاح عبر بريد الجزائر. إذا لم تقم بهذه العملية تواصل معنا عبر poste.dz." },
+    { subj: "تسجيل دخول جديد إلى حسابك", text: "تم تسجيل الدخول إلى تطبيق BaridiMob من جهاز جديد (Windows - Alger)." },
+    { subj: "كشف الحساب الشهري", text: "كشف حسابك البريدي لشهر نوفمبر متاح الآن داخل تطبيق BaridiMob أو موقع eccp.poste.dz." }
+  ];
+
+  const PHISH_SMS = [
+    { pre: "عميلنا العزيز، تم تعليق بطاقتك الذهبية مؤقتاً بسبب نشاط مشبوه. لإعادة التفعيل يرجى تأكيد بياناتك عبر الرابط: ", link: "baridimob-poste.com/verify" },
+    { pre: "لديك مبلغ 15,000.00 دج في انتظار الاستلام على حسابك البريدي. أكّد هويتك خلال 24 ساعة عبر: ", link: "eccp-poste.net/login" }
+  ];
+  const PHISH_EMAIL = [
+    { addr: "security@poste-dz-alerte.com", subj: "تنبيه أمني عاجل", pre: "تمت محاولة دخول مشبوهة إلى حسابك البريدي. لحماية أموالك يرجى تحديث بياناتك فوراً عبر: ", link: "poste-dz-alerte.com/login" },
+    { addr: "support@barididza.net", subj: "تحديث بيانات الحساب", pre: "سيتم إيقاف حسابك خلال 24 ساعة ما لم تقم بتأكيد معلوماتك عبر: ", link: "barididza.net/update" }
+  ];
+
+  const state = {
+    step: 0, code: "", draft: DEFAULT_CODE, messages: [], revealed: false,
+    idx: { bsms: 0, bmail: 0, psms: 0, pmail: 0 }, blocked: 0, seeded3: false, seeded4: false, notes: false
+  };
+  let timers = [];
+  const later = (fn, ms) => { timers.push(setTimeout(fn, ms)); };
+
+  const $ = (s) => document.querySelector(s);
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const timeNow = () => { const d = new Date(); return String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0"); };
+  const codeOrDefault = () => state.code || DEFAULT_CODE;
+
+  // Code rules: letters (Arabic or Latin) AND digits, 6–20 chars, no spaces/symbols.
+  function checkCode(v) {
+    return {
+      len: v.length >= 6 && v.length <= 20,
+      letter: /[A-Za-z\u0621-\u064A]/.test(v),
+      digit: /[0-9\u0660-\u0669]/.test(v),
+      clean: v.length > 0 && /^[A-Za-z0-9\u0621-\u064A\u0660-\u0669]+$/.test(v)
+    };
+  }
+  const isValid = (v) => Object.values(checkCode(v)).every(Boolean);
+
+  // ---------- Actions ----------
+  function activate() {
+    let value = (state.draft || "").trim();
+    if (!isValid(value)) {
+      if (state.step === 1) { renderPanel(); return; }
+      value = DEFAULT_CODE;
+    }
+    const changed = state.code && state.code !== value;
+    state.code = value;
+    state.draft = value;
+    state.messages.push({ kind: "system", text: changed
+      ? "🛡️ تم تحديث رمز مكافحة التصيد إلى [" + value + "]"
+      : "🛡️ تم تعيين رمز مكافحة التصيد في حسابك: [" + value + "]" });
+    render();
+  }
+
+  function ensureActive() { if (!state.code) activate(); }
+  const pick = (arr, key) => arr[state.idx[key]++ % arr.length];
+
+  function sendBank(channel) {
+    ensureActive();
+    if (channel === "email") {
+      const e = pick(BANK_EMAIL, "bmail");
+      state.messages.push({ kind: "email", from: PLATFORM, addr: PLATFORM_EMAIL, subj: e.subj, text: e.text, code: state.code, time: timeNow(), legit: true });
+    } else {
+      state.messages.push({ kind: "sms", from: PLATFORM, text: pick(BANK_SMS, "bsms"), code: state.code, time: timeNow(), legit: true });
+    }
+    renderPhone();
+  }
+
+  function sendPhish(channel) {
+    ensureActive();
+    let m;
+    if (channel === "email") {
+      const p = pick(PHISH_EMAIL, "pmail");
+      m = { kind: "email", from: PLATFORM, addr: p.addr, subj: p.subj, pre: p.pre, link: p.link };
+    } else {
+      const p = pick(PHISH_SMS, "psms");
+      m = { kind: "sms", from: PLATFORM, pre: p.pre, link: p.link };
+    }
+    Object.assign(m, { time: timeNow(), phish: true, flagged: false });
+    state.messages.push(m);
+    renderPhone();
+    later(() => { m.flagged = true; m.justFlagged = true; state.blocked++; render(); }, 1100);
+  }
+
+  function goTo(i) {
+    state.step = Math.max(0, Math.min(STEP_LABELS.length - 1, i));
+    if (state.step >= 2) ensureActive();
+    if (state.step === 2 && !state.seeded3) {
+      state.seeded3 = true;
+      later(() => sendBank("sms"), 500);
+      later(() => sendBank("email"), 1700);
+    }
+    if (state.step === 3 && !state.seeded4) {
+      state.seeded4 = true;
+      later(() => sendPhish("sms"), 900);
+      later(() => sendPhish("email"), 2600);
+    }
+    render();
+  }
+
+  function reset() {
+    timers.forEach(clearTimeout); timers = [];
+    Object.assign(state, { step: 0, code: "", draft: DEFAULT_CODE, messages: [], revealed: false,
+      idx: { bsms: 0, bmail: 0, psms: 0, pmail: 0 }, blocked: 0, seeded3: false, seeded4: false });
+    COMPARE.forEach((m) => { m.shown = false; });
+    render();
+  }
+
+  // ---------- Rendering ----------
+  function renderSteps() {
+    const nav = $("#steps");
+    nav.innerHTML = "";
+    STEP_LABELS.forEach((label, i) => {
+      const b = document.createElement("button");
+      b.className = "step-dot" + (i === state.step ? " active" : "") + (i < state.step ? " done" : "");
+      b.innerHTML = "<b>" + (i < state.step ? "✓" : i + 1) + "</b><span>" + label + "</span>";
+      b.onclick = () => goTo(i);
+      nav.appendChild(b);
+    });
+  }
+
+  function navButtons() {
+    const prev = state.step > 0 ? '<button class="btn ghost" data-act="prev">→ السابق</button>' : "";
+    const next = state.step < STEP_LABELS.length - 1
+      ? '<button class="btn ghost" data-act="next">التالي: ' + STEP_LABELS[state.step + 1] + " ←</button>" : "";
+    return '<div class="nav">' + prev + next + "</div>";
+  }
+
+  function checksHtml(v) {
+    const c = checkCode(v);
+    const item = (ok, t) => `<span class="${ok ? "pass" : ""}">${ok ? "✔" : "○"} ${t}</span>`;
+    return item(c.letter, "حروف") + item(c.digit, "أرقام") + item(c.len, "من 6 إلى 20 خانة") + item(c.clean, "بدون مسافات أو رموز");
+  }
+
+  function renderPanel() {
+    const c = esc(codeOrDefault());
+    let html = "";
+
+    if (state.step === 0) {
+      html = `
+        <div class="kicker">01 — المشكلة</div>
+        <h1>رسالة المحتال تطابق رسالة المنصة الرسمية</h1>
+        <p class="lead">يقع الضحايا في فخ التصيد لأن نص رسائل الهجوم <mark>يماثل تماماً</mark> نص الرسائل الرسمية للمنصات المالية، في الرسائل النصية والبريد الإلكتروني على حد سواء.</p>
+        <div class="card warn">👀 على الهاتف رسالتان من نفس المرسل وبنفس النص بالضبط.<br><b>أيّهما أرسلتها المنصة فعلاً؟</b></div>
+        ${state.revealed ? `
+          <div class="card bad">❌ الرسالة 1 مزيفة. الفرق الوحيد حروف قليلة في النطاق
+            (<span class="link diff">baridimob-poste.com</span> بدلاً من النطاق الجزائري الرسمي المعتمد <span class="link same">baridimob.poste.dz</span>).<br>
+            المستخدم العادي لا يلاحظ هذا الفرق، لكن غياب رمز مكافحة التصيد يفضحه فوراً!</div>`
+          : `<div class="row"><button class="btn" data-act="reveal">🔍 كشف الحقيقة</button></div>`}
+      `;
+    }
+
+    if (state.step === 1) {
+      const valid = isValid((state.draft || "").trim());
+      html = `
+        <div class="kicker">02 — الحل</div>
+        <h1>رمز مكافحة التصيد الاحتيالي</h1>
+        <p class="lead">رمز <mark>ينشئه المستخدم بنفسه</mark> داخل حسابه المالي على المنصة، ويتكون من <b>حروف وأرقام</b> يحددها هو. لا يعرفه إلا المستخدم والمنصة.</p>
+        <div class="card">
+          <div class="crumb">🏦 ${PLATFORM} ← <b>إعدادات الأمان</b> ← <b>رمز مكافحة التصيد</b></div>
+          <div class="row">
+            <input id="codeInput" class="code-input ${valid ? "" : "invalid"}" maxlength="20" value="${esc(state.draft)}" placeholder="مثال: ${esc(DEFAULT_CODE)}" autocomplete="off" spellcheck="false">
+            <button class="btn" data-act="activate" id="btnActivate" ${valid ? "" : "disabled"}>${state.code ? "🔄 تحديث الرمز" : "🛡️ تعيين الرمز"}</button>
+          </div>
+          <div class="checks" id="checks">${checksHtml((state.draft || "").trim())}</div>
+        </div>
+        ${state.code ? `<div class="card ok">✅ تم حفظ الرمز <span class="hl">[${esc(state.code)}]</span> في حسابك.<br>
+          المحتال لا يعرف هذا الرمز، لذلك لا يستطيع وضعه في رسائله.</div>` : ""}
+      `;
+    }
+
+    if (state.step === 2) {
+      html = `
+        <div class="kicker">03 — التطبيق</div>
+        <h1>الرمز يظهر في جميع رسائل المنصة</h1>
+        <p class="lead">بمجرد تعيين الرمز، أصبحت <b>جميع الرسائل النصية ورسائل البريد الإلكتروني</b> الصادرة من المنصة تحمل الرمز الشخصي <mark>[${c}]</mark>.</p>
+        <div class="card">
+          <div class="flow">
+            <span class="node">🏦 المنصة</span><span class="arrow">←</span>
+            <span class="node">تضيف <span class="hl">[${c}]</span></span><span class="arrow">←</span>
+            <span class="node">💬 SMS</span><span class="node">✉️ البريد</span>
+          </div>
+        </div>
+        <div class="row">
+          <button class="btn" data-act="bank-sms">💬 رسالة نصية من المنصة</button>
+          <button class="btn" data-act="bank-email">✉️ بريد إلكتروني من المنصة</button>
+        </div>
+      `;
+    }
+
+    if (state.step === 3) {
+      html = `
+        <div class="kicker">04 — النتيجة</div>
+        <h1>بدون <span class="hl">[${c}]</span> = احتمال تصيد</h1>
+        <p class="lead">إذا وصلت المستخدمَ رسالة تدّعي أنها من المنصة ولا تحمل الرمز، فقد تكون محاولة تصيد، فيرفض التفاعل معها. هكذا يضيف الرمز <b>طبقة أمان إضافية</b> لحسابه.</p>
+        <div class="card rule">
+          <span>✅</span><span>الرسالة تحمل <span class="hl">[${c}]</span>: اتصال حقيقي من المنصة</span>
+          <span>❌</span><span>الرسالة لا تحمل <span class="hl">[${c}]</span>: <b style="color:#fca5a5">احتمال تصيد، فلا تضغط على الرابط ولا ترد</b></span>
+        </div>
+        <div class="row" style="margin-bottom:12px">
+          <button class="btn red" data-act="phish-sms">🎭 SMS من المحتال</button>
+          <button class="btn red" data-act="phish-email">🎭 بريد من المحتال</button>
+          <button class="btn" data-act="bank-sms">🏦 رسالة حقيقية</button>
+        </div>
+        <div class="counter">محاولات تصيد تم كشفها: <b>${state.blocked}</b></div>
+      `;
+    }
+
+    $("#panel").innerHTML = html + navButtons() +
+      '<div class="hint">الأسهم ← → أو Space للتنقل · N للملاحظات · F لملء الشاشة · R لإعادة العرض</div>';
+
+    const input = $("#codeInput");
+    if (input) {
+      input.addEventListener("input", (e) => {
+        state.draft = e.target.value;
+        const v = state.draft.trim(), ok = isValid(v);
+        input.classList.toggle("invalid", !ok);
+        $("#btnActivate").disabled = !ok;
+        $("#checks").innerHTML = checksHtml(v);
+      });
+      input.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); activate(); } });
+    }
+  }
+
+  function el(tag, cls, text) {
+    const e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;
+    return e;
+  }
+
+  function bodyNode(m) {
+    const body = el("div", m.kind === "email" ? "email-body" : "");
+    if (m.code && m.kind === "sms") body.appendChild(el("div", "code-chip", "🛡️ [" + m.code + "]"));
+    if (m.text) body.appendChild(document.createTextNode(m.text));
+    if (m.pre) {
+      body.appendChild(document.createTextNode(m.pre));
+      const a = el("span", "link", m.link);
+      if (state.step === 0 && state.revealed) a.classList.add(m.truth === "real" ? "same" : "diff");
+      body.appendChild(a);
+    }
+    return body;
+  }
+
+  function makeBubble(m) {
+    if (m.kind === "system") return el("div", "sys", m.text);
+
+    const box = el("div", "msg" + (m.kind === "email" ? " email" : ""));
+    if (!m.shown) { box.classList.add("pop"); m.shown = true; }
+
+    if (m.kind === "email") {
+      const top = el("div", "email-top");
+      const line = el("div", "msg-head");
+      const left = el("span", "from", m.from);
+      line.append(left, el("span", "chan", "✉️ بريد إلكتروني · " + m.time));
+      top.append(line, el("div", "addr", m.addr), el("div", "subj", m.subj));
+      box.appendChild(top);
+      if (m.code) {
+        const b = el("div", "email-banner", "🛡️ رمز مكافحة التصيد الخاص بك: ");
+        b.appendChild(el("b", "", m.code));
+        box.appendChild(b);
+      }
+      box.appendChild(bodyNode(m));
+    } else {
+      const head = el("div", "msg-head");
+      head.append(el("span", "from", m.from || PLATFORM), el("span", "chan", "💬 SMS · " + m.time));
+      box.appendChild(head);
+      if (m.label) box.appendChild(el("div", "msg-label", m.label));
+      box.appendChild(bodyNode(m));
+    }
+
+    let verdict = null;
+    if (state.step === 0 && state.revealed && m.truth) {
+      verdict = m.truth === "real" ? ["ok", "✅ حقيقية — من المنصة"] : ["bad", "❌ مزيفة — من المحتال"];
+      box.classList.add(m.truth === "real" ? "trusted" : "flagged");
+    }
+    if (state.step === 3 && m.legit) {
+      verdict = ["ok", "✅ تحمل رمزك — اتصال حقيقي"];
+      box.classList.add("trusted");
+    }
+    if (m.phish && m.flagged) {
+      verdict = ["bad", "⚠️ لا تحمل رمزك [" + codeOrDefault() + "] — احتمال تصيد! لا تتفاعل معها"];
+      box.classList.add("flagged");
+      if (m.justFlagged) { box.classList.add("shake"); m.justFlagged = false; }
+    }
+    if (verdict) box.appendChild(el("div", "verdict " + verdict[0], verdict[1]));
+    return box;
+  }
+
+  function renderPhone() {
+    const inbox = $("#inbox");
+    inbox.innerHTML = "";
+    const list = state.step === 0 ? COMPARE : state.messages;
+
+    if (!list.length) {
+      inbox.appendChild(el("div", "empty", "📭 لا توجد رسائل بعد — عيّن رمزك للبدء"));
+    } else {
+      list.forEach((m) => inbox.appendChild(makeBubble(m)));
+    }
+    inbox.scrollTop = inbox.scrollHeight;
+
+    const badge = $("#shieldBadge");
+    const on = !!state.code && state.step > 0;
+    badge.className = "shield " + (on ? "on" : "off");
+    badge.textContent = on ? "🛡️ [" + state.code + "]" : "⚠️ بدون رمز";
+  }
+
+  function renderNotes() {
+    $("#notes").classList.toggle("open", state.notes);
+    $("#notesText").textContent = NOTES[state.step].replace(/\{code\}/g, codeOrDefault());
+  }
+
+  function render() {
+    const active = document.activeElement && document.activeElement.id === "codeInput";
+    renderSteps(); renderPanel(); renderPhone(); renderNotes();
+    if (active && $("#codeInput")) { const i = $("#codeInput"); i.focus(); i.setSelectionRange(i.value.length, i.value.length); }
+  }
+
+  // ---------- Events ----------
+  $("#panel").addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-act]");
+    if (!btn || btn.disabled) return;
+    const act = btn.dataset.act;
+    if (act === "next") goTo(state.step + 1);
+    else if (act === "prev") goTo(state.step - 1);
+    else if (act === "reveal") { state.revealed = true; render(); }
+    else if (act === "activate") activate();
+    else if (act === "bank-sms") sendBank("sms");
+    else if (act === "bank-email") sendBank("email");
+    else if (act === "phish-sms") sendPhish("sms");
+    else if (act === "phish-email") sendPhish("email");
+  });
+
+  $("#btnNotes").onclick = () => { state.notes = !state.notes; renderNotes(); };
+  $("#btnReset").onclick = reset;
+  $("#btnFull").onclick = toggleFull;
+
+  function toggleFull() {
+    if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {});
+    else document.exitFullscreen();
+  }
+
+  document.addEventListener("keydown", (e) => {
+    if (e.target && e.target.tagName === "INPUT") return;
+    const k = e.key;
+    // RTL: Left arrow = forward. PageDown/PageUp support presentation clickers.
+    if (k === "ArrowLeft" || k === "PageDown" || k === " ") { e.preventDefault(); goTo(state.step + 1); }
+    else if (k === "ArrowRight" || k === "PageUp" || k === "Backspace") { e.preventDefault(); goTo(state.step - 1); }
+    else if (k === "n" || k === "N" || k === "ى") { state.notes = !state.notes; renderNotes(); }
+    else if (k === "f" || k === "F" || k === "ب") toggleFull();
+    else if (k === "r" || k === "R" || k === "ق") reset();
+    else if (k >= "1" && k <= "4") goTo(Number(k) - 1);
+  });
+
+  setInterval(() => { $("#clock").textContent = timeNow(); }, 10000);
+  $("#clock").textContent = timeNow();
+  render();
+})();
+</script>
+</body>
+</html>

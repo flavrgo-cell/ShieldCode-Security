@@ -1,69 +1,79 @@
 export type Provider = 'baridimob' | 'redotpay' | 'eccp'
 
-export type TransactionStatus = 'pending' | 'approved' | 'rejected' | 'expired'
-
-export interface PaymentAccount {
-  id: string
-  account_id: string
-  provider: Provider
-  owner_email: string
-  owner_name: string
-  anti_phishing_code: string
-  created_at: string
-  updated_at: string
-}
-
-export interface Transaction {
-  id: string
-  account_id: string
-  amount: number
-  currency: string
-  merchant_name: string
-  merchant_id?: string
-  status: TransactionStatus
-  selfie_url: string
-  verification_token: string
-  ip_address?: string
-  user_agent?: string
-  device_info?: Record<string, unknown>
-  approved_at?: string
-  rejected_at?: string
-  expires_at: string
-  created_at: string
-  updated_at: string
-}
-
-export interface VerificationLog {
-  id: string
-  transaction_id: string
-  action: 'email_sent' | 'email_opened' | 'approved' | 'rejected' | 'expired'
-  ip_address?: string
-  user_agent?: string
-  metadata?: Record<string, unknown>
-  created_at: string
-}
-
-export interface CheckoutFormData {
-  accountId: string
-  provider: Provider
-  amount: number
-  merchantName: string
-}
-
-export const PROVIDER_INFO: Record<Provider, { name: string; color: string; description: string }> = {
+export const PROVIDER_INFO: Record<
+  Provider,
+  { name: string; description: string; color: string; icon?: string }
+> = {
   baridimob: {
     name: 'BaridiMob',
-    color: '#00A651',
-    description: 'Algeria Post Mobile Payment'
+    description: 'تطبيق بريد الجزائر للدفع عبر الهاتف والبطاقة الذهبية',
+    color: '#00b4a0',
   },
   redotpay: {
     name: 'RedotPay',
-    color: '#FF4444',
-    description: 'Global Crypto Visa Card'
+    description: 'بطاقة الدفع الرقمية العالمية',
+    color: '#f59e0b',
   },
   eccp: {
     name: 'ECCP',
-    color: '#0066CC',
-    description: 'E-Commerce Card Payment'
-  }
+    description: 'الحساب البريدي الجاري الإلكتروني (بريد الجزائر)',
+    color: '#38bdf8',
+  },
+}
+
+export interface MockUser {
+  id: string
+  name: string
+  phone: string
+  email: string
+  password?: string
+  balance: number
+  cardNumber: string
+  cardExpiry: string
+  cardCVV: string
+  antiphishingCode: string
+  antiphishingEnabled: boolean
+  accountNumber: string
+}
+
+// Universal Transaction Interface (supports both Supabase Gateway & Mock Bank Dashboard)
+export interface Transaction {
+  id: string
+  // Payment Gateway fields
+  account_id?: string
+  amount: number
+  currency?: string
+  merchant_name?: string
+  merchant_id?: string | null
+  status: 'pending' | 'approved' | 'rejected' | 'expired' | 'completed' | 'failed'
+  selfie_url?: string
+  verification_token?: string
+  ip_address?: string | null
+  user_agent?: string | null
+  device_info?: any
+  approved_at?: string | null
+  rejected_at?: string | null
+  expires_at?: string
+  created_at?: string
+  updated_at?: string
+
+  // Bank Dashboard fields
+  fromUserId?: string
+  toUserId?: string
+  type?: 'transfer' | 'payment' | 'flexi' | 'purchase'
+  description?: string
+  date?: string
+  antiphishingCodeIncluded?: boolean
+}
+
+export interface SMSMessage {
+  id: string
+  userId?: string
+  accountNumber?: string
+  sender: string
+  text: string
+  timestamp: string
+  isPhishing: boolean
+  antiphishingCode?: string
+  type?: 'otp' | 'transfer' | 'payment' | 'security' | 'alert'
 }

@@ -168,7 +168,7 @@ export function TransactionDetailModal({ transaction, onClose }: TransactionDeta
                   <Calendar className="w-4 h-4" />
                   Created
                 </div>
-                <p className="text-sm">{formatDate(transaction.created_at)}</p>
+                <p className="text-sm">{formatDate(transaction.created_at || "")}</p>
               </div>
             </div>
 
@@ -178,7 +178,7 @@ export function TransactionDetailModal({ transaction, onClose }: TransactionDeta
                   <Clock className="w-4 h-4" />
                   Expires
                 </div>
-                <p className="text-sm">{formatDate(transaction.expires_at)}</p>
+                <p className="text-sm">{formatDate(transaction.expires_at || "")}</p>
               </div>
 
               {transaction.ip_address && (

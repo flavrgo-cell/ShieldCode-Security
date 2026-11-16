@@ -106,8 +106,8 @@ export default function AdminDashboard() {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(
         (t) =>
-          t.account_id.toLowerCase().includes(query) ||
-          t.merchant_name.toLowerCase().includes(query) ||
+          (t.account_id && t.account_id.toLowerCase().includes(query)) ||
+          (t.merchant_name && t.merchant_name.toLowerCase().includes(query)) ||
           t.id.toLowerCase().includes(query)
       );
     }
@@ -348,7 +348,7 @@ export default function AdminDashboard() {
                             <td className="py-3 px-4">{getStatusBadge(transaction.status)}</td>
                             <td className="py-3 px-4">
                               <p className="text-sm text-muted-foreground">
-                                {formatDate(transaction.created_at)}
+                                {formatDate(transaction.created_at || "")}
                               </p>
                             </td>
                             <td className="py-3 px-4 text-right">
