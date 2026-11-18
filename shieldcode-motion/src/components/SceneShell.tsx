@@ -216,25 +216,23 @@ export const SceneShell: React.FC<SceneShellProps> = ({
       <div
         style={{
           position: "absolute",
-          width: 980,
-          height: 980,
+          width: 1180,
+          height: 1180,
           borderRadius: "50%",
-          top: -280 + orb1Y,
-          right: -180 + orb1X,
-          background: `radial-gradient(circle, ${primaryGlow}29 0%, transparent 68%)`,
-          filter: "blur(40px)",
+          top: -360 + orb1Y,
+          right: -260 + orb1X,
+          background: `radial-gradient(circle, ${primaryGlow}24 0%, ${primaryGlow}0e 38%, transparent 70%)`,
         }}
       />
       <div
         style={{
           position: "absolute",
-          width: 900,
-          height: 900,
+          width: 1100,
+          height: 1100,
           borderRadius: "50%",
-          bottom: -300 + orb2Y,
-          left: -160 + orb2X,
-          background: `radial-gradient(circle, ${secondaryGlow}26 0%, transparent 68%)`,
-          filter: "blur(45px)",
+          bottom: -380 + orb2Y,
+          left: -240 + orb2X,
+          background: `radial-gradient(circle, ${secondaryGlow}22 0%, ${secondaryGlow}0c 38%, transparent 70%)`,
         }}
       />
 
