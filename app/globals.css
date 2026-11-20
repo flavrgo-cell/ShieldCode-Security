@@ -1,28 +1,33 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
+@config '../tailwind.config.js';
 
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(0.985 0.002 250);
-  --foreground: oklch(0.18 0.02 250);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.18 0.02 250);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0.02 250);
-  --primary: oklch(0.55 0.18 250);
-  --primary-foreground: oklch(0.99 0 0);
-  --secondary: oklch(0.96 0.01 250);
-  --secondary-foreground: oklch(0.25 0.02 250);
-  --muted: oklch(0.96 0.01 250);
-  --muted-foreground: oklch(0.5 0.02 250);
-  --accent: oklch(0.96 0.01 250);
-  --accent-foreground: oklch(0.25 0.02 250);
+  --font-en: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-ar: 'Cairo', 'Almarai', ui-sans-serif, system-ui, 'Segoe UI', Tahoma, Arial, sans-serif;
+  --font-sans-active: var(--font-ar);
+
+  --background: #f4fbfa;
+  --foreground: #0b1e23;
+  --card: #ffffff;
+  --card-foreground: #0b1e23;
+  --popover: #ffffff;
+  --popover-foreground: #0b1e23;
+  --primary: #0d9488;
+  --primary-foreground: #ffffff;
+  --secondary: #e6f7f5;
+  --secondary-foreground: #0f3a40;
+  --muted: #ecf7f6;
+  --muted-foreground: #47656b;
+  --accent: #cffafe;
+  --accent-foreground: #0e4a54;
   --destructive: oklch(0.55 0.22 25);
   --destructive-foreground: oklch(0.99 0 0);
-  --border: oklch(0.91 0.01 250);
-  --input: oklch(0.91 0.01 250);
-  --ring: oklch(0.55 0.18 250);
+  --border: #cbe8e5;
+  --input: #cbe8e5;
+  --ring: #14b8a6;
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -39,26 +44,37 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
+/* Dynamic Global Font Switching Driven by HTML `dir` Attribute */
+html[dir='rtl'] {
+  --font-sans-active: var(--font-ar);
+  font-family: var(--font-ar);
+}
+
+html[dir='ltr'] {
+  --font-sans-active: var(--font-en);
+  font-family: var(--font-en);
+}
+
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.145 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.145 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.985 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.396 0.141 25.723);
-  --destructive-foreground: oklch(0.637 0.237 25.331);
-  --border: oklch(0.269 0 0);
-  --input: oklch(0.269 0 0);
-  --ring: oklch(0.439 0 0);
+  --background: #020c12;
+  --foreground: #ecfeff;
+  --card: #061820;
+  --card-foreground: #ecfeff;
+  --popover: #061820;
+  --popover-foreground: #ecfeff;
+  --primary: #14b8a6;
+  --primary-foreground: #022c22;
+  --secondary: #0b2630;
+  --secondary-foreground: #ccfbf1;
+  --muted: #0b2630;
+  --muted-foreground: #94b8be;
+  --accent: #0f333f;
+  --accent-foreground: #a5f3fc;
+  --destructive: oklch(0.45 0.18 25);
+  --destructive-foreground: #ffffff;
+  --border: #133c48;
+  --input: #133c48;
+  --ring: #22d3ee;
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
@@ -75,8 +91,10 @@
 }
 
 @theme inline {
-  --font-sans: 'Geist', 'Geist Fallback';
-  --font-mono: 'Geist Mono', 'Geist Mono Fallback';
+  --font-sans: var(--font-sans-active);
+  --font-en: var(--font-en);
+  --font-ar: var(--font-ar);
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -119,7 +137,529 @@
   * {
     @apply border-border outline-ring/50;
   }
-  body {
-    @apply bg-background text-foreground;
+
+  /* 1. Crisp Typography & Kerning */
+  html {
+    font-optical-sizing: auto;
+    font-synthesis-weight: none;
+    -webkit-tap-highlight-color: transparent;
+    @apply antialiased subpixel-antialiased;
   }
+
+  /* High-DPI / OLED / Retina panels get clean grayscale smoothing; 1x panels retain subpixel crispness */
+  @media (min-resolution: 1.5dppx), (-webkit-min-device-pixel-ratio: 1.5) {
+    html,
+    body {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+  }
+
+  @media (max-resolution: 1.25dppx) {
+    html,
+    body {
+      @apply subpixel-antialiased;
+    }
+  }
+
+  /* Twitter/X Aesthetic: Standard body text defaults to Medium (500) */
+  body {
+    @apply bg-background text-foreground font-sans font-medium antialiased subpixel-antialiased;
+    font-weight: 500;
+  }
+
+  /* Dense, punchy geometric headings (700/800) with slight negative tracking */
+  h1,
+  h2 {
+    @apply font-extrabold tracking-tight;
+    font-weight: 800;
+  }
+
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-bold tracking-tight;
+    font-weight: 700;
+  }
+
+  /* Interactive buttons strictly bold (700) */
+  button,
+  [type='button'],
+  [type='submit'],
+  [type='reset'],
+  [role='button'] {
+    @apply font-bold tracking-tight antialiased;
+    font-weight: 700;
+  }
+
+  /* Tabular numerals across tables, inputs, DZD prices, and Anti-Phishing codes */
+  table,
+  thead,
+  tbody,
+  tr,
+  th,
+  td,
+  input,
+  textarea,
+  select,
+  code,
+  pre,
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
+
+  /* Preserve Plus Jakarta Sans on explicit LTR segments embedded in RTL pages */
+  [dir='ltr']:not(.font-mono):not(code):not(pre) {
+    font-family: var(--font-en);
+  }
+}
+
+/* ==========================================================================
+   3. LIGHTWEIGHT HARDWARE ACCELERATION, GLASSMORPHISM & GRADIENT UTILITIES
+   ========================================================================== */
+
+@layer utilities {
+  .cv-auto {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 720px;
+  }
+
+  /* Lightweight GPU compositor hints (only transform + opacity, zero permanent layer bloat) */
+  .gpu-accelerated {
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+  }
+
+  .transition-gpu {
+    transition-property: transform, opacity;
+    transition-duration: 180ms;
+    transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+    transform: translate3d(0, 0, 0);
+  }
+
+  .hover-lift-gpu {
+    transform: translate3d(0, 0, 0);
+    transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1), opacity 180ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .hover-lift-gpu:hover {
+    transform: translate3d(0, -2px, 0);
+  }
+
+  .hover-lift-gpu:active {
+    transform: translate3d(0, 0, 0) scale(0.98);
+  }
+
+  /* Lightweight Frosted Glassmorphism + Multi-Layered Depth */
+  .glass-surface {
+    @apply backdrop-blur-sm ring-1 ring-teal-500/20 dark:ring-white/10 shadow-retina-card;
+    background-color: rgba(255, 255, 255, 0.88);
+  }
+
+  .dark .glass-surface {
+    background-color: rgba(15, 23, 42, 0.78);
+  }
+
+  .glass-navbar {
+    @apply backdrop-blur-sm ring-1 ring-teal-500/15 dark:ring-white/10 shadow-sm;
+    background-color: rgba(255, 255, 255, 0.88);
+  }
+
+  .dark .glass-navbar {
+    background-color: rgba(15, 23, 42, 0.78);
+  }
+
+  /* Smooth Multi-Stop Teal Gradient (zero SVG filter overhead) */
+  .anti-banding-teal {
+    background-image: linear-gradient(
+      135deg,
+      #0f766e 0%,
+      #0d9488 20%,
+      #0e9f9c 40%,
+      #0891b2 64%,
+      #06b6d4 86%,
+      #0891b2 100%
+    );
+  }
+
+  .anti-banding-canvas {
+    background-image:
+      radial-gradient(ellipse 75% 55% at 15% 0%, rgba(20, 184, 166, 0.14) 0%, rgba(13, 148, 136, 0.07) 36%, rgba(6, 182, 212, 0.03) 68%, transparent 100%),
+      radial-gradient(ellipse 70% 50% at 85% 100%, rgba(6, 182, 212, 0.14) 0%, rgba(20, 184, 166, 0.06) 40%, transparent 100%),
+      linear-gradient(160deg, #f4fbfa 0%, #ffffff 42%, #f0fdfa 74%, #ecfeff 100%);
+  }
+
+  html.dark .anti-banding-canvas,
+  .dark .anti-banding-canvas {
+    background-image:
+      radial-gradient(ellipse 75% 55% at 15% 0%, rgba(20, 184, 166, 0.16) 0%, rgba(13, 148, 136, 0.08) 38%, rgba(6, 182, 212, 0.03) 70%, transparent 100%),
+      radial-gradient(ellipse 70% 50% at 85% 100%, rgba(6, 182, 212, 0.14) 0%, rgba(20, 184, 166, 0.05) 45%, transparent 100%),
+      linear-gradient(160deg, #020c12 0%, #04151e 38%, #031118 72%, #020a0f 100%);
+  }
+}
+
+/* ==========================================================================
+   4. NATIVE VIEW TRANSITIONS API: 300MS GPU CIRCULAR CLIP-PATH WIPE
+   ========================================================================== */
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 9999;
+  animation: theme-circular-wipe 300ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes theme-circular-wipe {
+  from {
+    clip-path: circle(0px at var(--vt-x, 50%) var(--vt-y, 50%));
+  }
+  to {
+    clip-path: circle(var(--vt-r, 150vmax) at var(--vt-x, 50%) var(--vt-y, 50%));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-new(root) {
+    animation-duration: 1ms;
+  }
+}
+
+
+/* ==========================================================================
+   5. GRID BACKGROUND (Light / Dark Mode Adaptive — GPU Compositor Only)
+   ========================================================================== */
+
+/* Light Mode */
+.grid-wrapper {
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  top: 0;
+  background-color: #f8fafc;
+  overflow-x: hidden;
+}
+
+.grid-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100vh;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  contain: strict;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0.8) 25%,
+    rgba(0, 0, 0, 0.15) 45%,
+    transparent 60%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0.8) 25%,
+    rgba(0, 0, 0, 0.15) 45%,
+    transparent 60%
+  );
+}
+
+.grid-background::before {
+  content: "";
+  position: absolute;
+  inset: -36px 0 0 -36px;
+  background-image:
+    linear-gradient(to right, rgba(100, 116, 139, 0.22) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(100, 116, 139, 0.22) 1px, transparent 1px);
+  background-size: 36px 36px;
+  will-change: transform;
+  animation: gridFlow 18s linear infinite;
+}
+
+@keyframes gridFlow {
+  0%   { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(36px, 36px, 0); }
+}
+
+/* Dark Mode */
+.dark .grid-wrapper,
+[data-theme="dark"] .grid-wrapper {
+  background-color: #09090b;
+}
+
+.dark .grid-background::before,
+[data-theme="dark"] .grid-background::before {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.09) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.09) 1px, transparent 1px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grid-background::before {
+    animation: none;
+  }
+}
+
+/* ==========================================================================
+   6. AUTH PORTAL CARD & INPUTS (Modern 40px/20px Soft-Shadow Aesthetic)
+   ========================================================================== */
+
+/* Light Mode */
+.auth-container {
+  max-width: 400px;
+  width: 100%;
+  background: #F8F9FD;
+  background: linear-gradient(0deg, rgb(255, 255, 255) 0%, rgb(244, 247, 251) 100%);
+  border-radius: 40px;
+  padding: 25px 35px;
+  border: 5px solid rgb(255, 255, 255);
+  box-shadow: rgba(13, 148, 136, 0.35) 0px 30px 30px -20px;
+  margin: 20px auto;
+  position: relative;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.heading {
+  text-align: center;
+  font-weight: 900;
+  font-size: 28px;
+  color: #0d9488;
+  letter-spacing: -0.02em;
+}
+
+.form {
+  margin-top: 20px;
+}
+
+.form .input {
+  width: 100%;
+  background: white;
+  border: none;
+  padding: 15px 20px;
+  border-radius: 20px;
+  margin-top: 15px;
+  box-shadow: #ccfbf1 0px 10px 10px -5px;
+  border-inline: 2px solid transparent;
+  color: #0b1e23;
+  font-size: 14px;
+  font-weight: 600;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+}
+
+.form .input::placeholder {
+  color: rgb(170, 170, 170);
+  font-weight: 500;
+}
+
+.form .input:focus {
+  outline: none;
+  border-inline: 2px solid #06b6d4;
+  box-shadow: rgba(6, 182, 212, 0.22) 0px 12px 14px -5px;
+}
+
+.form .forgot-password {
+  display: block;
+  margin-top: 10px;
+  margin-inline-start: 10px;
+}
+
+.form .forgot-password a {
+  font-size: 11px;
+  color: #0d9488;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.form .forgot-password a:hover {
+  color: #06b6d4;
+  text-decoration: underline;
+}
+
+.form .login-button {
+  display: block;
+  width: 100%;
+  font-weight: bold;
+  background: linear-gradient(45deg, #0d9488 0%, #06b6d4 100%);
+  color: white;
+  padding-block: 15px;
+  margin: 20px auto;
+  border-radius: 20px;
+  box-shadow: rgba(13, 148, 136, 0.45) 0px 20px 10px -15px;
+  border: none;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+  cursor: pointer;
+}
+
+.form .login-button:hover:not(:disabled) {
+  transform: scale(1.03);
+  box-shadow: rgba(13, 148, 136, 0.5) 0px 23px 10px -20px;
+}
+
+.form .login-button:active:not(:disabled) {
+  transform: scale(0.95);
+  box-shadow: rgba(13, 148, 136, 0.4) 0px 15px 10px -10px;
+}
+
+.form .login-button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.social-account-container {
+  margin-top: 25px;
+}
+
+.social-account-container .title {
+  display: block;
+  text-align: center;
+  font-size: 10px;
+  color: rgb(170, 170, 170);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.social-account-container .social-accounts {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 8px;
+}
+
+.social-account-container .social-accounts .social-button {
+  background: linear-gradient(45deg, rgb(15, 23, 42) 0%, rgb(71, 85, 105) 100%);
+  border: 5px solid white;
+  padding: 5px;
+  border-radius: 50%;
+  width: 40px;
+  aspect-ratio: 1;
+  display: grid;
+  place-content: center;
+  box-shadow: rgba(13, 148, 136, 0.35) 0px 12px 10px -8px;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  cursor: pointer;
+}
+
+.social-account-container .social-accounts .social-button .svg {
+  fill: white;
+  margin: auto;
+}
+
+.social-account-container .social-accounts .social-button:hover {
+  transform: scale(1.2);
+}
+
+.social-account-container .social-accounts .social-button:active {
+  transform: scale(0.9);
+}
+
+.agreement {
+  display: block;
+  text-align: center;
+  margin-top: 15px;
+}
+
+.agreement a {
+  text-decoration: none;
+  color: #0d9488;
+  font-size: 9.5px;
+  line-height: 1.4;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.agreement a:hover {
+  color: #06b6d4;
+  text-decoration: underline;
+}
+
+/* Dark Mode Adaptation */
+.dark .auth-container,
+[data-theme="dark"] .auth-container {
+  background: #061820;
+  background: linear-gradient(0deg, #061820 0%, #031017 100%);
+  border: 5px solid rgba(255, 255, 255, 0.08);
+  box-shadow: rgba(6, 182, 212, 0.2) 0px 30px 30px -20px;
+}
+
+.dark .heading,
+[data-theme="dark"] .heading {
+  color: #22d3ee;
+}
+
+.dark .form .input,
+[data-theme="dark"] .form .input {
+  background: #031017;
+  color: #ecfeff;
+  border: 1px solid rgba(20, 184, 166, 0.15);
+  border-inline: 2px solid transparent;
+  box-shadow: rgba(6, 182, 212, 0.12) 0px 10px 10px -5px;
+}
+
+.dark .form .input::placeholder,
+[data-theme="dark"] .form .input::placeholder {
+  color: rgba(148, 184, 190, 0.55);
+}
+
+.dark .form .input:focus,
+[data-theme="dark"] .form .input:focus {
+  outline: none;
+  border-inline: 2px solid #22d3ee;
+  box-shadow: rgba(34, 211, 238, 0.22) 0px 12px 14px -5px;
+}
+
+.dark .form .forgot-password a,
+[data-theme="dark"] .form .forgot-password a {
+  color: #22d3ee;
+}
+
+.dark .form .forgot-password a:hover,
+[data-theme="dark"] .form .forgot-password a:hover {
+  color: #67e8f9;
+}
+
+.dark .form .login-button,
+[data-theme="dark"] .form .login-button {
+  background: linear-gradient(45deg, #0d9488 0%, #0891b2 100%);
+  box-shadow: rgba(6, 182, 212, 0.28) 0px 20px 10px -15px;
+}
+
+.dark .form .login-button:hover:not(:disabled),
+[data-theme="dark"] .form .login-button:hover:not(:disabled) {
+  box-shadow: rgba(6, 182, 212, 0.35) 0px 23px 10px -20px;
+}
+
+.dark .social-account-container .title,
+[data-theme="dark"] .social-account-container .title {
+  color: rgba(148, 184, 190, 0.65);
+}
+
+.dark .social-account-container .social-accounts .social-button,
+[data-theme="dark"] .social-account-container .social-accounts .social-button {
+  background: linear-gradient(45deg, #031017 0%, #0b2630 100%);
+  border: 5px solid rgba(255, 255, 255, 0.1);
+  box-shadow: rgba(6, 182, 212, 0.18) 0px 12px 10px -8px;
+}
+
+.dark .agreement a,
+[data-theme="dark"] .agreement a {
+  color: #22d3ee;
+}
+
+.dark .agreement a:hover,
+[data-theme="dark"] .agreement a:hover {
+  color: #67e8f9;
 }

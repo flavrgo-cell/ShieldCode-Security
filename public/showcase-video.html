@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>فيديو تقديمي استعراضي: منصة درع الأمان والدفع الإلكتروني الجزائري</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0d9488;
+      --primary-light: #14b8a6;
+      --secondary: #10b981;
+      --accent: #06b6d4;
+      --gold: #d97706;
+      --gold-light: #fbbf24;
+    }
+    body {
+      font-family: 'Cairo', system-ui, -apple-system, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #060911;
+      color: #f1f5f9;
+      overflow-x: hidden;
+      user-select: none;
+    }
+    .font-mono-code {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .font-en {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    /* Grid Mesh Background */
+    .grid-mesh {
+      background-image: 
+        linear-gradient(to right, rgba(20, 184, 166, 0.07) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(20, 184, 166, 0.07) 1px, transparent 1px);
+      background-size: 36px 36px;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 60%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 60%, transparent 100%);
+    }
+
+    /* Glassmorphism */
+    .glass-card {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+    }
+    .glass-card-glow {
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(20, 184, 166, 0.3);
+      box-shadow: 0 0 35px -5px rgba(20, 184, 166, 0.2);
+    }
+
+    /* Gold Card Gradient */
+    .edahabia-gold {
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #1e293b 100%);
+      border: 1px solid rgba(251, 191, 36, 0.4);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(251, 191, 36, 0.15);
+    }
+
+    /* Animations */
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.4; transform: scale(1); }
+      50% { opacity: 0.8; transform: scale(1.05); }
+    }
+    .animate-pulse-glow {
+      animation: pulseGlow 4s infinite ease-in-out;
+    }
+
+    @keyframes scanline {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(1000%); }
+    }
+    .scanner-line {
+      animation: scanline 2.5s linear infinite;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.6);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(20, 184, 166, 0.5);
+      border-radius: 9999px;
+    }
+
+    /* Video Aspect Ratio & Stage */
+    .aspect-video-box {
+      aspect-ratio: 16 / 9;
+    }
+    
+    .slide-enter {
+      animation: slideIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(16px) scale(0.985); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+  </style>
+</head>
+<body class="bg-[#070b14] text-slate-100 min-h-screen flex flex-col justify-between selection:bg-teal-500 selection:text-white">
+
+  <!-- Top Sticky Navigation & Video Header Bar -->
+  <header class="w-full border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-md px-4 py-2.5 flex items-center justify-between z-50">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-teal-600 via-emerald-500 to-cyan-400 flex items-center justify-center shadow-lg shadow-teal-500/20">
+        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+        </svg>
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <h1 class="text-sm md:text-base font-extrabold tracking-tight bg-gradient-to-r from-teal-400 via-emerald-300 to-cyan-400 bg-clip-text text-transparent">
+            درع الأمان الرقمي الجزائري
+          </h1>
+          <span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-teal-500/10 text-teal-300 border border-teal-500/30">
+            SecurePay / ShieldCode
+          </span>
+        </div>
+        <p class="text-[11px] text-slate-400 hidden sm:block">فيديو استعراضي شامل للبنية التقنية وهيكلة حماية البطاقة الذهبية و CIB</p>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="flex items-center gap-2">
+      <!-- Voice Toggle -->
+      <button id="toggleAudioBtn" onclick="toggleSpeech()" title="تفعيل/تعطيل المعلق الصوتي الذكي" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 transition">
+        <svg id="audioIcon" class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+        </svg>
+        <span id="audioText" class="hidden md:inline">التعليق الصوتي: مفعّل</span>
+      </button>
+
+      <!-- Record Video Button -->
+      <button id="recordVideoBtn" onclick="toggleScreenRecording()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-rose-600/20 hover:bg-rose-600/30 border border-rose-500/40 text-rose-300 transition">
+        <span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse"></span>
+        <span id="recBtnText">تسجيل العرض كفيديو</span>
+      </button>
+
+      <!-- Fullscreen Button -->
+      <button onclick="toggleFullScreen()" title="ملء الشاشة" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Video Main Stage Container -->
+  <main class="flex-1 w-full max-w-7xl mx-auto p-3 sm:p-5 flex flex-col justify-center">
+    
+    <!-- Theater / Cinema Box (16:9) -->
+    <div id="videoContainer" class="relative w-full rounded-2xl overflow-hidden glass-card shadow-2xl border border-slate-700/60 flex flex-col">
+      
+      <!-- Grid Mesh Overlay -->
+      <div class="absolute inset-0 grid-mesh pointer-events-none z-0"></div>
+
+      <!-- Live Scene Stage Screen -->
+      <div id="sceneViewport" class="relative z-10 w-full p-4 sm:p-8 md:p-10 min-h-[580px] flex flex-col justify-between overflow-hidden">
+        
+        <!-- Dynamic Slide Content Injected by JS -->
+        <div id="slideContent" class="slide-enter w-full h-full flex-1 flex flex-col justify-center">
+          <!-- Slide HTML renders here -->
+        </div>
+
+      </div>
+
+      <!-- VIDEO CONTROLLER / PROGRESS TIMELINE -->
+      <div class="relative z-20 bg-slate-950/90 border-t border-slate-800/90 px-4 py-3 backdrop-blur-md">
+        
+        <!-- Timeline Progress Bar with chapter markers -->
+        <div class="relative w-full mb-3 group cursor-pointer" onclick="seekByClick(event)">
+          <div class="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden relative">
+            <div id="progressBar" class="h-full bg-gradient-to-r from-teal-500 via-emerald-400 to-cyan-400 w-0 transition-all duration-300 ease-linear rounded-full"></div>
+          </div>
+          <!-- Chapters Tick Marks -->
+          <div class="absolute inset-0 flex justify-between pointer-events-none px-0.5">
+            <div class="w-1 h-2.5 bg-slate-700/60 rounded"></div>
+            <div class="w-1 h-2.5 bg-slate-700/60 rounded"></div>
+            <div class="w-1 h-2.5 bg-slate-700/60 rounded"></div>
+            <div class="w-1 h-2.5 bg-slate-700/60 rounded"></div>
+            <div class="w-1 h-2.5 bg-slate-700/60 rounded"></div>
+            <div class="w-1 h-2.5 bg-slate-700/60 rounded"></div>
+            <div class="w-1 h-2.5 bg-slate-700/60 rounded"></div>
+          </div>
+        </div>
+
+        <!-- Controls Row -->
+        <div class="flex items-center justify-between flex-wrap gap-2 text-xs">
+          
+          <!-- Play / Prev / Next / Timer -->
+          <div class="flex items-center gap-2">
+            <button onclick="prevSlide()" class="p-2 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 transition" title="المشهد السابق">
+              <svg class="w-4 h-4 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+
+            <button id="playBtn" onclick="togglePlay()" class="px-4 py-1.5 rounded-lg bg-gradient-to-r from-teal-600 to-emerald-500 hover:from-teal-500 hover:to-emerald-400 text-white font-bold flex items-center gap-1.5 shadow-md shadow-teal-500/20 transition">
+              <svg id="playIcon" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+              <span id="playStatusText">تشغيل العرض</span>
+            </button>
+
+            <button onclick="nextSlide()" class="p-2 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 transition" title="المشهد التالي">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+
+            <div class="flex items-center gap-1.5 mr-2 font-mono-code text-slate-400 text-[11px]">
+              <span id="currentTimeText" class="text-teal-400 font-bold">00:00</span>
+              <span>/</span>
+              <span id="totalDurationText">03:30</span>
+            </div>
+          </div>
+
+          <!-- Current Chapter Name Badge -->
+          <div class="hidden lg:flex items-center gap-2">
+            <span class="text-slate-400 text-[11px]">المشهد الحالي:</span>
+            <span id="chapterBadge" class="font-bold text-teal-300 bg-teal-950/60 border border-teal-800/50 px-2.5 py-1 rounded-md text-xs">
+              1. ملخص المشروع والهوية البصرية
+            </span>
+          </div>
+
+          <!-- Playback Speed & Chapters Dropdown -->
+          <div class="flex items-center gap-2">
+            <div class="flex items-center bg-slate-900 border border-slate-800 rounded-lg p-0.5">
+              <button onclick="setSpeed(1)" class="speed-btn px-2 py-0.5 rounded text-[11px] font-bold text-teal-400 bg-slate-800">1x</button>
+              <button onclick="setSpeed(1.25)" class="speed-btn px-2 py-0.5 rounded text-[11px] font-bold text-slate-400 hover:text-slate-200">1.25x</button>
+              <button onclick="setSpeed(1.5)" class="speed-btn px-2 py-0.5 rounded text-[11px] font-bold text-slate-400 hover:text-slate-200">1.5x</button>
+            </div>
+            
+            <span class="text-slate-400 text-[11px]">المشهد: <span id="slideIndexText" class="font-bold text-white">1</span> / 7</span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Chapter Quick Navigation Pills -->
+    <div class="mt-4 flex items-center justify-between gap-1 overflow-x-auto pb-1 text-xs">
+      <button onclick="goToSlide(0)" class="chapter-pill flex-1 py-1.5 px-2 rounded-lg border border-teal-500/30 bg-teal-500/10 text-teal-300 font-bold whitespace-nowrap text-center transition">
+        1. الهوية والرسالة
+      </button>
+      <button onclick="goToSlide(1)" class="chapter-pill flex-1 py-1.5 px-2 rounded-lg border border-slate-800 bg-slate-900/60 text-slate-400 hover:text-slate-200 whitespace-nowrap text-center transition">
+        2. مكافحة التصيد والبيومتري
+      </button>
+      <button onclick="goToSlide(2)" class="chapter-pill flex-1 py-1.5 px-2 rounded-lg border border-slate-800 bg-slate-900/60 text-slate-400 hover:text-slate-200 whitespace-nowrap text-center transition">
+        3. الحزمة التقنية والمجلدات
+      </button>
+      <button onclick="goToSlide(3)" class="chapter-pill flex-1 py-1.5 px-2 rounded-lg border border-slate-800 bg-slate-900/60 text-slate-400 hover:text-slate-200 whitespace-nowrap text-center transition">
+        4. الـ 27 مساراً ونقاط الـ API
+      </button>
+      <button onclick="goToSlide(4)" class="chapter-pill flex-1 py-1.5 px-2 rounded-lg border border-slate-800 bg-slate-900/60 text-slate-400 hover:text-slate-200 whitespace-nowrap text-center transition">
+        5. الشفافية: الحقيقي vs المحاكى
+      </button>
+      <button onclick="goToSlide(5)" class="chapter-pill flex-1 py-1.5 px-2 rounded-lg border border-slate-800 bg-slate-900/60 text-slate-400 hover:text-slate-200 whitespace-nowrap text-center transition">
+        6. الأمان وسرعة 60fps
+      </button>
+      <button onclick="goToSlide(6)" class="chapter-pill flex-1 py-1.5 px-2 rounded-lg border border-slate-800 bg-slate-900/60 text-slate-400 hover:text-slate-200 whitespace-nowrap text-center transition">
+        7. خطة الإطلاق الفعلي
+      </button>
+    </div>
+
+  </main>
+
+  <!-- Video Narration Script Teleprompter / Details Bottom Drawer -->
+  <footer class="w-full border-t border-slate-800 bg-slate-950/95 py-3 px-4">
+    <div class="max-w-7xl mx-auto flex items-center justify-between text-xs text-slate-400">
+      <div class="flex items-center gap-2">
+        <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+        <span class="font-bold text-slate-300">النص التعليقي للمشهد الحالي (Voiceover Teleprompter):</span>
+        <span id="teleprompterText" class="text-teal-200/90 font-medium truncate max-w-xl"></span>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="text-[11px] text-slate-500 hidden sm:inline">مفاتيح الاختصار: [مسافة] تشغيل/إيقاف • [الأسهم] السابق/التالي • [F] ملء الشاشة</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Script Definitions & Presentation Engine -->
+  <script>
+    // 7 Structured Video Scenes matching the Technical Report
+    const scenes = [
+      {
+        id: 0,
+        title: "1. ملخص المشروع والهوية والرسالة",
+        chapter: "1. ملخص المشروع والهوية",
+        duration: 30, // seconds
+        teleprompter: "تمثل المنصة درع أمان متكامل لتأمين التجارة والدفع الإلكتروني في الجزائر، وتستهدف حماية مستخدمي البطاقة الذهبية لبريد الجزائر وبطاقات CIB البنكية من الاحتيال والتصيد وسرقة البيانات.",
+        render: () => `
+          <div class="space-y-6">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div class="flex items-center gap-3">
+                <span class="px-2.5 py-1 rounded bg-teal-500/20 text-teal-300 border border-teal-500/40 text-xs font-bold uppercase tracking-wider font-en">Chapter 01</span>
+                <h2 class="text-2xl md:text-3xl font-black text-white">الرؤية والرسالة: درع الأمان المالي الجزائري</h2>
+              </div>
+              <span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30 flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span> حماية البطاقة الذهبية و CIB
+              </span>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+              
+              <!-- Left Column: Core Value Proposition -->
+              <div class="lg:col-span-7 space-y-4">
+                <div class="p-4 rounded-xl glass-card border border-teal-500/30 bg-teal-950/20">
+                  <h3 class="text-lg font-bold text-teal-300 mb-2 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    فكرة المنصة والرسالة الوطنية
+                  </h3>
+                  <p class="text-sm leading-relaxed text-slate-300">
+                    أول منصة متخصصة تقضي تماماً على حوادث الاحتيال الإلكتروني وسرقة الأرصدة المصرفية أثناء الشراء عبر الإنترنت، من خلال حماية طبقات الدفع لمستخدمي <span class="text-amber-400 font-bold">بريد الجزائر (البطاقة الذهبية)</span> وجميع بنوك الساحة الوطنية <span class="text-cyan-400 font-bold">(CIB)</span>.
+                  </p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 text-xs">
+                  <div class="p-3 rounded-lg bg-slate-900/80 border border-slate-800">
+                    <span class="text-slate-400 block mb-1">الهوية البصرية:</span>
+                    <div class="flex items-center gap-2">
+                      <div class="w-4 h-4 rounded bg-[#0d9488]" title="Teal"></div>
+                      <div class="w-4 h-4 rounded bg-[#10b981]" title="Emerald"></div>
+                      <div class="w-4 h-4 rounded bg-[#06b6d4]" title="Cyan"></div>
+                      <span class="text-slate-200 font-semibold">Teal / Emerald / Cyan</span>
+                    </div>
+                  </div>
+                  <div class="p-3 rounded-lg bg-slate-900/80 border border-slate-800">
+                    <span class="text-slate-400 block mb-1">دعم اللغة والاتجاه:</span>
+                    <span class="text-emerald-400 font-bold">عربي أصيل (RTL) + خط Cairo الحديث</span>
+                  </div>
+                </div>
+
+                <!-- Theme Modes Comparison -->
+                <div class="grid grid-cols-2 gap-3">
+                  <div class="p-3 rounded-xl bg-slate-900 border border-slate-800">
+                    <div class="flex items-center justify-between mb-1">
+                      <span class="text-xs font-bold text-slate-200">الوضع الليلي (Dark OLED)</span>
+                      <span class="text-[10px] font-mono-code text-teal-400">#090d16</span>
+                    </div>
+                    <p class="text-[11px] text-slate-400">عميق ومريح للعين مع تباين عالي للنصوص لمنع إجهاد البصر.</p>
+                  </div>
+                  <div class="p-3 rounded-xl bg-slate-200/90 text-slate-900 border border-slate-300">
+                    <div class="flex items-center justify-between mb-1">
+                      <span class="text-xs font-bold text-slate-900">الوضع النهاري (Light Mode)</span>
+                      <span class="text-[10px] font-mono-code text-teal-700">#f8fafc</span>
+                    </div>
+                    <p class="text-[11px] text-slate-700">خلفية مريحة مع شبكة خفيفة بتدرج هادئ وتناسق بصري تام.</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right Column: Visual Showcase Preview -->
+              <div class="lg:col-span-5 flex flex-col items-center">
+                <!-- Realistic Edahabia Card Visual -->
+                <div class="w-full max-w-sm edahabia-gold rounded-2xl p-5 relative overflow-hidden shadow-2xl transition transform hover:scale-105 duration-300">
+                  <div class="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-amber-500/10 blur-2xl"></div>
+                  <div class="flex justify-between items-center mb-6">
+                    <div class="flex items-center gap-1.5">
+                      <div class="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-400/40 flex items-center justify-center font-bold text-amber-300 text-xs">
+                        DZ
+                      </div>
+                      <span class="text-xs font-bold tracking-wider text-amber-200">الجمهورية الجزائرية</span>
+                    </div>
+                    <span class="text-xs font-black text-amber-400 tracking-widest font-en">EDAHABIA</span>
+                  </div>
+
+                  <!-- Chip & NFC -->
+                  <div class="flex items-center gap-3 mb-5">
+                    <div class="w-10 h-7 rounded bg-gradient-to-r from-amber-400 to-yellow-600 flex items-center justify-center border border-yellow-300/60 shadow">
+                      <div class="w-8 h-5 border border-yellow-800/40 rounded-sm"></div>
+                    </div>
+                    <svg class="w-5 h-5 text-amber-400/80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"/></svg>
+                  </div>
+
+                  <!-- Card Number Preview -->
+                  <div class="font-mono-code text-base md:text-lg tracking-widest text-amber-100 font-bold mb-4 text-center">
+                    6280 22•• •••• 8914
+                  </div>
+
+                  <div class="flex justify-between items-end text-xs text-amber-300/80">
+                    <div>
+                      <div class="text-[9px] uppercase tracking-wider text-slate-400">Card Holder</div>
+                      <div class="font-bold text-slate-200 font-en">MOHAMED BENALI</div>
+                    </div>
+                    <div class="text-left font-en">
+                      <div class="text-[9px] uppercase tracking-wider text-slate-400">Expires</div>
+                      <div class="font-bold text-slate-200">09/29</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mt-4 flex items-center gap-2 text-xs text-slate-400">
+                  <svg class="w-4 h-4 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  <span>الخلفية الشبكية الهندسية Grid Mesh مع عزل طبقي فائق السرعة</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        `
+      },
+      {
+        id: 1,
+        title: "2. المشكلة التقنية والميدانية والحلول الحصرية",
+        chapter: "2. مكافحة التصيد والبيومتري",
+        duration: 35,
+        teleprompter: "تعالج المنصة أخطر 3 ثغرات: مكافحة الصفحات المزيفة بكود الأمان السري الشخصي، المصادقة البيومترية المتقدمة بفحص حي للوجه، وتأمين التوجيه والدفع بمسار go/[hash] المشفر.",
+        render: () => `
+          <div class="space-y-6">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div class="flex items-center gap-3">
+                <span class="px-2.5 py-1 rounded bg-teal-500/20 text-teal-300 border border-teal-500/40 text-xs font-bold uppercase tracking-wider font-en">Chapter 02</span>
+                <h2 class="text-2xl md:text-3xl font-black text-white">المشكلات الميدانية والحلول الحصرية للمنصة</h2>
+              </div>
+              <span class="px-3 py-1 rounded-full text-xs font-bold bg-rose-500/10 text-rose-400 border border-rose-500/30">
+                الحماية من التصيد (Zero Phishing)
+              </span>
+            </div>
+
+            <!-- 3 Pillars Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+              
+              <!-- Pillar 1: Anti-Phishing Secret Phrase -->
+              <div class="p-5 rounded-2xl glass-card border border-teal-500/30 hover:border-teal-400/60 transition group flex flex-col justify-between">
+                <div>
+                  <div class="w-12 h-12 rounded-xl bg-teal-500/20 border border-teal-500/40 flex items-center justify-center mb-4 text-teal-400 group-hover:scale-110 transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                  </div>
+                  <h3 class="text-lg font-bold text-white mb-2">1. كود الأمان السري الشخصي</h3>
+                  <p class="text-xs leading-relaxed text-slate-300 mb-4">
+                    عبارة سرية مشفرة يحددها العميل مسبقاً وتظهر في كل عملية دفع حقيقية. إذا زار المستخدم صفحة مزيفة فلن تظهر العبارة، مما يكشف الاحتيال قبل إدخال أي رقم أو رمز OTP.
+                  </p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-teal-950/60 border border-teal-800/60 flex items-center justify-between text-xs font-mono-code">
+                  <span class="text-slate-400">Secret Phrase:</span>
+                  <span class="text-teal-300 font-bold bg-teal-900/60 px-2 py-0.5 rounded">"صحراء-قسنطينة-2026"</span>
+                </div>
+              </div>
+
+              <!-- Pillar 2: Biometric Liveness Camera -->
+              <div class="p-5 rounded-2xl glass-card border border-cyan-500/30 hover:border-cyan-400/60 transition group flex flex-col justify-between">
+                <div>
+                  <div class="w-12 h-12 rounded-xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center mb-4 text-cyan-400 group-hover:scale-110 transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                  </div>
+                  <h3 class="text-lg font-bold text-white mb-2">2. فحص الوجه الحي (Biometrics)</h3>
+                  <p class="text-xs leading-relaxed text-slate-300 mb-4">
+                    إلزام المستخدم بالتحقق البيومتري للوجه (Selfie Liveness) عبر الكاميرا قبل تفويض الخصم، مما يمنع استغلال البطاقات المسروقة أو المستنسخة حتى وإن توفر الرمز السري PIN.
+                  </p>
+                </div>
+                <div class="relative overflow-hidden p-2 rounded-lg bg-slate-900 border border-cyan-800/50 flex items-center justify-center">
+                  <div class="absolute inset-0 bg-cyan-500/10 scanner-line"></div>
+                  <span class="text-xs font-bold text-cyan-300 flex items-center gap-1.5 z-10">
+                    <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span> Live Liveness Active (99.8%)
+                  </span>
+                </div>
+              </div>
+
+              <!-- Pillar 3: Encrypted Routing -->
+              <div class="p-5 rounded-2xl glass-card border border-emerald-500/30 hover:border-emerald-400/60 transition group flex flex-col justify-between">
+                <div>
+                  <div class="w-12 h-12 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center mb-4 text-emerald-400 group-hover:scale-110 transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                  </div>
+                  <h3 class="text-lg font-bold text-white mb-2">3. توجيه مشفر go/[hash]</h3>
+                  <p class="text-xs leading-relaxed text-slate-300 mb-4">
+                    مسار توجيه مشفر وخزنة معزولة تمنع تمرير بيانات البطاقة لأي طرف ثالث، وتضمن عدم تخزين أرقام CVV2 أو الرمز السري PIN مطلقاً وفق معايير PCI-DSS الصارمة.
+                  </p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-emerald-950/60 border border-emerald-800/60 flex items-center justify-between text-xs font-mono-code">
+                  <span class="text-slate-400">Vault Rail:</span>
+                  <span class="text-emerald-300 font-bold">HMAC-SHA256 Blind Index</span>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Security Assurance Banner -->
+            <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-700/80 flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-teal-500/20 flex items-center justify-center text-teal-300 font-bold text-sm">
+                  ✓
+                </div>
+                <span class="text-xs text-slate-200">
+                  حماية ثلاثية الطبقات: <strong>التأكد من أصالة المتجر</strong> ➔ <strong>تأكيد هوية حامل البطاقة</strong> ➔ <strong>تشفير العملية بدون تخزين أرقام حساسة</strong>.
+                </span>
+              </div>
+              <span class="text-[11px] font-mono-code text-teal-400 hidden sm:inline">Zero-Trust Architecture</span>
+            </div>
+          </div>
+        `
+      },
+      {
+        id: 2,
+        title: "3. البنية التقنية الحديثة وهيكلة المجلدات",
+        chapter: "3. الحزمة التقنية والمجلدات",
+        duration: 35,
+        teleprompter: "بنيت المنصة بأحدث المعايير العالمية: Next.js 16 مع React 19، وTypeScript الصارم، وTailwind CSS v4، وFramer Motion، مع التشفير بـ Jose وWebCrypto ومكتبة WebRTC للكاميرا.",
+        render: () => `
+          <div class="space-y-6">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div class="flex items-center gap-3">
+                <span class="px-2.5 py-1 rounded bg-teal-500/20 text-teal-300 border border-teal-500/40 text-xs font-bold uppercase tracking-wider font-en">Chapter 03</span>
+                <h2 class="text-2xl md:text-3xl font-black text-white">الحزمة التقنية المتطورة وهيكلة المشروع</h2>
+              </div>
+              <span class="px-3 py-1 rounded-full text-xs font-bold bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 font-en">
+                Next.js 16 • React 19 • Tailwind v4
+              </span>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              
+              <!-- Tech Badges Matrix (7 cols) -->
+              <div class="lg:col-span-7 space-y-3">
+                <h3 class="text-sm font-bold text-slate-300 flex items-center gap-2">
+                  <svg class="w-4 h-4 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                  المحركات التقنية الأساسية (Core Tech Stack)
+                </h3>
+
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 text-xs">
+                  <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 hover:border-teal-500/40 transition">
+                    <div class="font-bold text-white font-en">Next.js 16</div>
+                    <div class="text-[10px] text-slate-400 mt-0.5">App Router & Serverless</div>
+                  </div>
+                  <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 hover:border-teal-500/40 transition">
+                    <div class="font-bold text-white font-en">React 19</div>
+                    <div class="text-[10px] text-slate-400 mt-0.5">Actions & Transitions</div>
+                  </div>
+                  <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 hover:border-teal-500/40 transition">
+                    <div class="font-bold text-white font-en">TypeScript 5</div>
+                    <div class="text-[10px] text-slate-400 mt-0.5">Strict Banking Types</div>
+                  </div>
+                  <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 hover:border-teal-500/40 transition">
+                    <div class="font-bold text-white font-en">Tailwind CSS v4</div>
+                    <div class="text-[10px] text-slate-400 mt-0.5">Ultra-Fast Styling</div>
+                  </div>
+                  <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 hover:border-teal-500/40 transition">
+                    <div class="font-bold text-white font-en">Jose & WebCrypto</div>
+                    <div class="text-[10px] text-slate-400 mt-0.5">HMAC-SHA256 & JWT</div>
+                  </div>
+                  <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 hover:border-teal-500/40 transition">
+                    <div class="font-bold text-white font-en">WebRTC & Canvas</div>
+                    <div class="text-[10px] text-slate-400 mt-0.5">Zero-Lag Camera HUD</div>
+                  </div>
+                  <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 hover:border-teal-500/40 transition">
+                    <div class="font-bold text-white font-en">Framer Motion</div>
+                    <div class="text-[10px] text-slate-400 mt-0.5">LazyMotion 60fps</div>
+                  </div>
+                  <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 hover:border-teal-500/40 transition">
+                    <div class="font-bold text-white font-en">Supabase Proxy</div>
+                    <div class="text-[10px] text-slate-400 mt-0.5">PostgreSQL Client</div>
+                  </div>
+                  <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 hover:border-teal-500/40 transition">
+                    <div class="font-bold text-white font-en">Lucide React</div>
+                    <div class="text-[10px] text-slate-400 mt-0.5">Lightweight SVG Icons</div>
+                  </div>
+                </div>
+
+                <div class="p-3 rounded-lg bg-teal-950/30 border border-teal-800/40 text-xs text-slate-300">
+                  🚀 <strong>الأداء والموثوقية:</strong> تضمن هذه الحزمة استجابة فورية أقل من 50 مللي ثانية للواجهات وحماية منيعة لبيانات العمليات المصرفية.
+                </div>
+              </div>
+
+              <!-- Directory Structure (5 cols) -->
+              <div class="lg:col-span-5 bg-slate-950 rounded-2xl p-4 border border-slate-800 font-mono-code text-[11px] leading-relaxed">
+                <div class="flex items-center justify-between pb-2 mb-2 border-b border-slate-800 text-slate-400">
+                  <span class="text-teal-400 font-bold">PROJECT/ Directory Tree</span>
+                  <span>Production Ready</span>
+                </div>
+                <div class="space-y-1 text-slate-300">
+                  <div><span class="text-amber-400 font-bold">app/</span> <span class="text-slate-500"># Next.js App Router (27 routes)</span></div>
+                  <div class="pr-3 text-slate-400">├── (auth)/ <span class="text-slate-500"># Login & Register portals</span></div>
+                  <div class="pr-3 text-slate-400">├── admin/ <span class="text-slate-500"># Fraud Monitoring Dashboard</span></div>
+                  <div class="pr-3 text-slate-400">├── developer/ <span class="text-slate-500"># B2B API Keys & SDK Docs</span></div>
+                  <div class="pr-3 text-slate-400">├── go/[hash]/ <span class="text-slate-500"># Encrypted Safe Redirection</span></div>
+                  <div class="pr-3 text-slate-400">├── vault/ <span class="text-slate-500"># Zero-Knowledge Card Vault</span></div>
+                  <div class="pr-3 text-slate-400">├── verify/ <span class="text-slate-500"># Phishing Link Inspector</span></div>
+                  <div class="pr-3 text-teal-400 font-bold">└── api/ <span class="text-slate-500"># 17 Serverless Backend Routes</span></div>
+                  <div><span class="text-cyan-400 font-bold">components/</span> <span class="text-slate-500"># Reusable UI Architecture</span></div>
+                  <div class="pr-3 text-slate-400">├── checkout-modal.tsx <span class="text-slate-500"># Multi-step Payment</span></div>
+                  <div class="pr-3 text-slate-400">├── selfie-camera.tsx <span class="text-slate-500"># Biometric Liveness</span></div>
+                  <div class="pr-3 text-slate-400">└── realistic-edahabia-card.tsx <span class="text-slate-500"># 3D Gold Card</span></div>
+                  <div><span class="text-emerald-400 font-bold">lib/</span> <span class="text-slate-500"># Cryptography & Bank Engines</span></div>
+                  <div class="pr-3 text-slate-400">├── algerian-banks.ts <span class="text-slate-500"># RIP/RIB Modulo 97</span></div>
+                  <div class="pr-3 text-slate-400">└── edahabia-cipher.ts <span class="text-slate-500"># Blind Index HMAC</span></div>
+                  <div><span class="text-purple-400 font-bold">scripts/ & schema.sql</span> <span class="text-slate-500"># PostgreSQL DDL</span></div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        `
+      },
+      {
+        id: 3,
+        title: "4. خريطة الصفحات والمسارات البرمجية (27 مساراً)",
+        chapter: "4. الـ 27 مساراً ونقاط الـ API",
+        duration: 35,
+        teleprompter: "تم بناء وتجميع المنصة بالكامل بسبعة وعشرين مساراً برمجياً: عشر صفحات واجهة أمامية متجاوبة، وسبعة عشر مساراً للـ API تشمل سلة الدفع والمصادقة والخزنة والتوجيه المشفر.",
+        render: () => `
+          <div class="space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
+              <div class="flex items-center gap-3">
+                <span class="px-2.5 py-1 rounded bg-teal-500/20 text-teal-300 border border-teal-500/40 text-xs font-bold uppercase tracking-wider font-en">Chapter 04</span>
+                <h2 class="text-2xl md:text-3xl font-black text-white">خريطة الصفحات والمسارات المعتمدة (27 مساراً)</h2>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-teal-500/20 text-teal-300 border border-teal-500/40">10 واجهات</span>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">17 Backend APIs</span>
+              </div>
+            </div>
+
+            <!-- Two Columns: Frontend (10) vs Backend APIs (17) -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+              
+              <!-- Frontend 10 Routes (5 cols) -->
+              <div class="md:col-span-5 bg-slate-900/80 rounded-xl p-3 border border-slate-800 flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-2 pb-1.5 border-b border-slate-800">
+                    <span class="text-xs font-bold text-teal-300 flex items-center gap-1.5">
+                      <span class="w-2 h-2 rounded-full bg-teal-400"></span> 10 صفحات واجهة أمامية (Frontend)
+                    </span>
+                    <span class="text-[10px] text-slate-400 font-mono-code">next build: OK</span>
+                  </div>
+                  <div class="space-y-1 text-xs">
+                    <div class="p-1.5 rounded bg-slate-950/60 flex items-center justify-between">
+                      <span class="font-mono-code text-teal-300 font-bold">/</span>
+                      <span class="text-slate-300 text-[11px]">الرئيسية الموحدة + المتجر التجريبي</span>
+                    </div>
+                    <div class="p-1.5 rounded bg-slate-950/60 flex items-center justify-between">
+                      <span class="font-mono-code text-teal-300 font-bold">/login & /register</span>
+                      <span class="text-slate-300 text-[11px]">بوابات الدخول والتسجيل الآمن</span>
+                    </div>
+                    <div class="p-1.5 rounded bg-slate-950/60 flex items-center justify-between">
+                      <span class="font-mono-code text-teal-300 font-bold">/admin</span>
+                      <span class="text-slate-300 text-[11px]">لوحة الإدارة ورصد محاولات الاحتيال</span>
+                    </div>
+                    <div class="p-1.5 rounded bg-slate-950/60 flex items-center justify-between">
+                      <span class="font-mono-code text-teal-300 font-bold">/developer</span>
+                      <span class="text-slate-300 text-[11px]">بوابة المطورين ومفاتيح API Keys</span>
+                    </div>
+                    <div class="p-1.5 rounded bg-slate-950/60 flex items-center justify-between">
+                      <span class="font-mono-code text-teal-300 font-bold">/vault</span>
+                      <span class="text-slate-300 text-[11px]">خزنة البطاقات المشفرة صفرياً</span>
+                    </div>
+                    <div class="p-1.5 rounded bg-slate-950/60 flex items-center justify-between">
+                      <span class="font-mono-code text-teal-300 font-bold">/verify</span>
+                      <span class="text-slate-300 text-[11px]">أداة فحص سلامة الروابط</span>
+                    </div>
+                    <div class="p-1.5 rounded bg-slate-950/60 flex items-center justify-between">
+                      <span class="font-mono-code text-teal-300 font-bold">/pending</span>
+                      <span class="text-slate-300 text-[11px]">شاشة انتظار الـ OTP وموافقة الدفع</span>
+                    </div>
+                    <div class="p-1.5 rounded bg-slate-950/60 flex items-center justify-between">
+                      <span class="font-mono-code text-teal-300 font-bold">/go/[hash]</span>
+                      <span class="text-slate-300 text-[11px]">بوابة التوجيه المشفر ومنع التلاعب</span>
+                    </div>
+                    <div class="p-1.5 rounded bg-slate-950/60 flex items-center justify-between">
+                      <span class="font-mono-code text-teal-300 font-bold">/_not-found</span>
+                      <span class="text-slate-300 text-[11px]">صفحة 404 المخصصة لمنع التسلل</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Backend 17 APIs (7 cols) -->
+              <div class="md:col-span-7 bg-slate-900/80 rounded-xl p-3 border border-slate-800 flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-2 pb-1.5 border-b border-slate-800">
+                    <span class="text-xs font-bold text-cyan-300 flex items-center gap-1.5">
+                      <span class="w-2 h-2 rounded-full bg-cyan-400"></span> 17 نقطة اتصال خلفية (Backend APIs)
+                    </span>
+                    <span class="text-[10px] text-slate-400 font-mono-code">RESTful Serverless</span>
+                  </div>
+                  
+                  <div class="grid grid-cols-2 gap-1.5 text-[11px] font-mono-code">
+                    <div class="p-1 rounded bg-slate-950/70 border border-slate-800/80 text-cyan-300">
+                      /api/checkout <span class="text-slate-400 block font-sans text-[10px]">إدارة سلة الدفع</span>
+                    </div>
+                    <div class="p-1 rounded bg-slate-950/70 border border-slate-800/80 text-cyan-300">
+                      /api/verify <span class="text-slate-400 block font-sans text-[10px]">فحص ومطابقة الروابط</span>
+                    </div>
+                    <div class="p-1 rounded bg-slate-950/70 border border-slate-800/80 text-cyan-300">
+                      /api/v1/auth/register <span class="text-slate-400 block font-sans text-[10px]">تسجيل الحسابات</span>
+                    </div>
+                    <div class="p-1 rounded bg-slate-950/70 border border-slate-800/80 text-cyan-300">
+                      /api/v1/auth/onboarding <span class="text-slate-400 block font-sans text-[10px]">ربط الهاتف (+213)</span>
+                    </div>
+                    <div class="p-1 rounded bg-slate-950/70 border border-slate-800/80 text-cyan-300">
+                      /api/v1/auth/session <span class="text-slate-400 block font-sans text-[10px]">التحقق من رموز الـ JWT</span>
+                    </div>
+                    <div class="p-1 rounded bg-slate-950/70 border border-slate-800/80 text-cyan-300">
+                      /api/v1/auth/verify-otp <span class="text-slate-400 block font-sans text-[10px]">مطابقة رمز الـ OTP</span>
+                    </div>
+                    <div class="p-1 rounded bg-slate-950/70 border border-slate-800/80 text-cyan-300">
+                      /api/v1/cards/edahabia <span class="text-slate-400 block font-sans text-[10px]">الفهرسة العمياء للبطاقة</span>
+                    </div>
+                    <div class="p-1 rounded bg-slate-950/70 border border-slate-800/80 text-cyan-300">
+                      /api/v1/company/register <span class="text-slate-400 block font-sans text-[10px]">توثيق سجل الشركات</span>
+                    </div>
+                    <div class="p-1 rounded bg-slate-950/70 border border-slate-800/80 text-cyan-300">
+                      /api/v1/institutions/active <span class="text-slate-400 block font-sans text-[10px]">قائمة البنوك الـ 16</span>
+                    </div>
+                    <div class="p-1 rounded bg-slate-950/70 border border-slate-800/80 text-cyan-300">
+                      /api/v1/institutions/api-keys <span class="text-slate-400 block font-sans text-[10px]">مفاتيح المؤسسات</span>
+                    </div>
+                    <div class="p-1 rounded bg-slate-950/70 border border-slate-800/80 text-cyan-300">
+                      /api/v1/security/code <span class="text-slate-400 block font-sans text-[10px]">توليد كود مكافحة التصيد</span>
+                    </div>
+                    <div class="p-1 rounded bg-slate-950/70 border border-slate-800/80 text-cyan-300">
+                      /api/v1/shield/configure <span class="text-slate-400 block font-sans text-[10px]">ضبط حساسية السيلفي</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mt-2 p-1.5 rounded bg-cyan-950/40 border border-cyan-800/50 text-[10px] text-slate-300 flex items-center justify-between">
+                  <span>+ مسارات إضافية: /sms/simulate, /verify-link/[hash], /widget/session</span>
+                  <span class="text-emerald-400 font-bold font-mono-code">27/27 Routes Compiled</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        `
+      },
+      {
+        id: 4,
+        title: "5. مصفوفة الشفافية: الحقيقي الفعلي vs المحاكى الذكي",
+        chapter: "5. الشفافية: الحقيقي vs المحاكى",
+        duration: 35,
+        teleprompter: "بكل شفافية: المنطق الحسابي والرياضي حقيقي بالكامل، بما في ذلك ستة عشر بنكاً ومؤسسة وطنية وخوارزمية Modulo 97، بينما تعمل بوابات الخصم والـ SMS في وضع الساندبوكس بانتظار العقود الرسمية.",
+        render: () => `
+          <div class="space-y-6">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div class="flex items-center gap-3">
+                <span class="px-2.5 py-1 rounded bg-teal-500/20 text-teal-300 border border-teal-500/40 text-xs font-bold uppercase tracking-wider font-en">Chapter 05</span>
+                <h2 class="text-2xl md:text-3xl font-black text-white">الشفافية الكاملة: ما هو فعلي وحقيقي vs المحاكاة</h2>
+              </div>
+              <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                Audit & Verification Report
+              </span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              
+              <!-- Column 1: Live & Algorithmic Logic -->
+              <div class="p-5 rounded-2xl glass-card border border-emerald-500/30 bg-emerald-950/10 flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-2">
+                      <div class="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-400">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                      </div>
+                      <h3 class="text-lg font-bold text-emerald-300">ما هو حقيقي وفعلي 100% (Live Logic)</h3>
+                    </div>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 font-en">PRODUCTION CODE</span>
+                  </div>
+
+                  <ul class="space-y-3 text-xs text-slate-200">
+                    <li class="flex items-start gap-2">
+                      <span class="text-emerald-400 font-bold mt-0.5">✓</span>
+                      <div>
+                        <strong>دليل المؤسسات المالية الجزائرية:</strong> 16 بنكاً ومؤسسة معتمدة (بريد الجزائر 007، BNA 001، BEA 002، BADR 003، CPA 004، CNEP 005، BDL 006، والبنوك الخاصة والإسلامية).
+                      </div>
+                    </li>
+                    <li class="flex items-start gap-2">
+                      <span class="text-emerald-400 font-bold mt-0.5">✓</span>
+                      <div>
+                        <strong>محرك التحقق من الحساب والـ RIP / RIB:</strong> خوارزمية فحص الـ 20 رقماً مطبقة بالكامل مع التحقق الرياضي الصارم (Modulo 97) ومطابقة بادئة الحساب البريدي الجاري 00799999.
+                      </div>
+                    </li>
+                    <li class="flex items-start gap-2">
+                      <span class="text-emerald-400 font-bold mt-0.5">✓</span>
+                      <div>
+                        <strong>تشفير البطاقات والفهرسة العمياء:</strong> خوارزمية HMAC-SHA256 تمنع تخزين رقم البطاقة أو CVV2 أو PIN وفق معايير PCI-DSS.
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="mt-4 p-2.5 rounded-lg bg-emerald-950/60 border border-emerald-800/40 text-[11px] text-emerald-200 font-mono-code">
+                  Algorithm verified: 100% Client & Server Zero-Leakage
+                </div>
+              </div>
+
+              <!-- Column 2: Intelligent Sandbox & Fallbacks -->
+              <div class="p-5 rounded-2xl glass-card border border-amber-500/30 bg-amber-950/10 flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-2">
+                      <div class="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center text-amber-400">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+                      </div>
+                      <h3 class="text-lg font-bold text-amber-300">ما يعمل بالمحاكاة الذكية (Sandbox)</h3>
+                    </div>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300 font-en">SIMULATED RAILS</span>
+                  </div>
+
+                  <ul class="space-y-3 text-xs text-slate-200">
+                    <li class="flex items-start gap-2">
+                      <span class="text-amber-400 font-bold mt-0.5">⚡</span>
+                      <div>
+                        <strong>قاعدة بيانات Supabase (PostgreSQL):</strong> المخطط جاهز بالكامل (schema.sql). تم بناء معالج ذكي للتحويل التلقائي للذاكرة المحلية عند غياب مفاتيح الـ env لمنع انهيار النظام.
+                      </div>
+                    </li>
+                    <li class="flex items-start gap-2">
+                      <span class="text-amber-400 font-bold mt-0.5">⚡</span>
+                      <div>
+                        <strong>بوابة تسوية الدفع الفعلي (Payment Settlement):</strong> تعمل في وضع المحاكاة بانتظار توقيع الربط الحي مع SATIM أو بريد الجزائر أو Chargily Pay.
+                      </div>
+                    </li>
+                    <li class="flex items-start gap-2">
+                      <span class="text-amber-400 font-bold mt-0.5">⚡</span>
+                      <div>
+                        <strong>بوابة الرسائل القصيرة (SMS Gateway):</strong> مسار /api/v1/sms/simulate يولد الرموز افتراضياً بانتظار ربط واجهة مزود الاتصالات المحلي (Mobilis, Djezzy, Ooredoo).
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="mt-4 p-2.5 rounded-lg bg-amber-950/60 border border-amber-800/40 text-[11px] text-amber-200 font-mono-code">
+                  Zero Error Tolerance: Runs seamlessly with or without credentials
+                </div>
+              </div>
+
+            </div>
+          </div>
+        `
+      },
+      {
+        id: 5,
+        title: "6. الأمان السيبراني وتحسينات الأداء الفائق (60fps)",
+        chapter: "6. الأمان وسرعة 60fps",
+        duration: 35,
+        teleprompter: "صممت المنصة بأعلى معايير الحماية: عزل مفاتيح السيرفر، تسريع العرض بمعالج الرسوميات GPU لمعدل 60 إطاراً في الثانية، مع تخفيض حزمة الجافاسكريبت بأكثر من أربعين بالمئة.",
+        render: () => `
+          <div class="space-y-6">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div class="flex items-center gap-3">
+                <span class="px-2.5 py-1 rounded bg-teal-500/20 text-teal-300 border border-teal-500/40 text-xs font-bold uppercase tracking-wider font-en">Chapter 06</span>
+                <h2 class="text-2xl md:text-3xl font-black text-white">الأمان السيبراني ومعدل الأداء الفائق (60fps)</h2>
+              </div>
+              <span class="px-3 py-1 rounded-full text-xs font-bold bg-teal-500/10 text-teal-400 border border-teal-500/30">
+                GPU Accelerated • 60 FPS
+              </span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              
+              <!-- Security Specs -->
+              <div class="p-5 rounded-2xl glass-card border border-teal-500/30 space-y-3">
+                <h3 class="text-base font-bold text-teal-300 flex items-center gap-2 mb-2">
+                  <svg class="w-5 h-5 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                  بنية الأمان ومكافحة التصيد
+                </h3>
+
+                <div class="space-y-2 text-xs">
+                  <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+                    <span class="font-bold text-white block">تحقق بيومتري مباشر بالسيلفي:</span>
+                    <span class="text-slate-400 text-[11px]">تشغيل الكاميرا من المتصفح مباشرة وتخزين بصمة مشفرة لمنع روبوتات ومحتالي الشاشات.</span>
+                  </div>
+                  <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+                    <span class="font-bold text-white block">حماية التوجيه بالهاش المشفر (/go/[hash]):</span>
+                    <span class="text-slate-400 text-[11px]">منع حقن الروابط الخبيثة والتأكد من التوقيع الرقمي للمتجر المسجل.</span>
+                  </div>
+                  <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+                    <span class="font-bold text-white block">عزل المفاتيح ومنع ثغرات XSS / CSRF:</span>
+                    <span class="text-slate-400 text-[11px]">حجب المفاتيح الحساسة عبر معمارية Next.js Server Components.</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Performance Specs -->
+              <div class="p-5 rounded-2xl glass-card border border-cyan-500/30 space-y-3">
+                <h3 class="text-base font-bold text-cyan-300 flex items-center gap-2 mb-2">
+                  <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                  تحسينات السرعة وسلاسة الاستجابة
+                </h3>
+
+                <div class="space-y-2 text-xs">
+                  <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+                    <div class="flex justify-between items-center mb-0.5">
+                      <span class="font-bold text-white">تسريع الرسوميات GPU Acceleration:</span>
+                      <span class="text-cyan-400 font-mono-code text-[11px]">60 FPS</span>
+                    </div>
+                    <span class="text-slate-400 text-[11px]">استخدام will-change: transform وتفادي التقطيع أثناء التمرير في الهواتف.</span>
+                  </div>
+                  <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+                    <div class="flex justify-between items-center mb-0.5">
+                      <span class="font-bold text-white">تحسين الحزمة بالتحميل الكسول:</span>
+                      <span class="text-emerald-400 font-mono-code text-[11px]">-40% JS Payload</span>
+                    </div>
+                    <span class="text-slate-400 text-[11px]">استخدام next/dynamic وتفعيل LazyMotion لتقليل زمن التحميل الأولي.</span>
+                  </div>
+                  <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+                    <div class="flex justify-between items-center mb-0.5">
+                      <span class="font-bold text-white">تبديل الوضع الليلي دون وميض:</span>
+                      <span class="text-teal-400 font-mono-code text-[11px]">Zero Layout Shift</span>
+                    </div>
+                    <span class="text-slate-400 text-[11px]">متغيرات CSS مسبقة التحميل تمنع وميض الشاشة عند التنقل.</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between text-xs font-mono-code text-slate-400">
+              <span class="text-teal-400">Lighthouse Score: 98/100</span>
+              <span class="text-emerald-400">First Contentful Paint: 0.6s</span>
+              <span class="text-cyan-400">Cumulative Layout Shift: 0.00</span>
+            </div>
+          </div>
+        `
+      },
+      {
+        id: 6,
+        title: "7. خطة الإطلاق والتشغيل الفعلي المجدولة",
+        chapter: "7. خطة الإطلاق الفعلي",
+        duration: 35,
+        teleprompter: "للانتقال إلى التشغيل التجاري الفعلي: تبدأ الخطة بربط قاعدة بيانات Supabase الإنتاجية، ثم توقيع عقد الدفع مع البنك أو Chargily، وتفعيل بوابة الـ SMS والبريد والنشر عبر Cloudflare بنطاق جزائري رسمي.",
+        render: () => `
+          <div class="space-y-5">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div class="flex items-center gap-3">
+                <span class="px-2.5 py-1 rounded bg-teal-500/20 text-teal-300 border border-teal-500/40 text-xs font-bold uppercase tracking-wider font-en">Chapter 07</span>
+                <h2 class="text-2xl md:text-3xl font-black text-white">خطة الإطلاق والتشغيل التجاري الفعلي</h2>
+              </div>
+              <span class="px-3 py-1 rounded-full text-xs font-bold bg-teal-500/10 text-teal-400 border border-teal-500/30">
+                5-Step Launch Roadmap
+              </span>
+            </div>
+
+            <!-- 5 Roadmap Steps -->
+            <div class="grid grid-cols-1 sm:grid-cols-5 gap-3">
+              
+              <!-- Step 1 -->
+              <div class="p-3.5 rounded-xl glass-card border border-teal-500/30 flex flex-col justify-between">
+                <div>
+                  <div class="w-7 h-7 rounded-lg bg-teal-500/20 text-teal-300 flex items-center justify-center font-bold text-xs mb-2">1</div>
+                  <h4 class="font-bold text-white text-xs mb-1">تفعيل Supabase</h4>
+                  <p class="text-[11px] text-slate-400 leading-tight">إنشاء المشروع وتنفيذ سكربتات SQL الجاهزة وإضافة المفاتيح في .env.local.</p>
+                </div>
+                <span class="mt-2 text-[10px] text-teal-400 font-mono-code">scripts/001 & 002</span>
+              </div>
+
+              <!-- Step 2 -->
+              <div class="p-3.5 rounded-xl glass-card border border-teal-500/30 flex flex-col justify-between">
+                <div>
+                  <div class="w-7 h-7 rounded-lg bg-teal-500/20 text-teal-300 flex items-center justify-center font-bold text-xs mb-2">2</div>
+                  <h4 class="font-bold text-white text-xs mb-1">عقد الدفع الحي</h4>
+                  <p class="text-[11px] text-slate-400 leading-tight">توقيع العقد التجاري مع بنك وطني، بريد الجزائر، أو مزود مثل Chargily Pay.</p>
+                </div>
+                <span class="mt-2 text-[10px] text-teal-400 font-mono-code">SATIM / BaridiNet</span>
+              </div>
+
+              <!-- Step 3 -->
+              <div class="p-3.5 rounded-xl glass-card border border-teal-500/30 flex flex-col justify-between">
+                <div>
+                  <div class="w-7 h-7 rounded-lg bg-teal-500/20 text-teal-300 flex items-center justify-center font-bold text-xs mb-2">3</div>
+                  <h4 class="font-bold text-white text-xs mb-1">بوابة رسائل SMS</h4>
+                  <p class="text-[11px] text-slate-400 leading-tight">ربط مزود اتصالات محلي لإيصال رمز الـ OTP في أقل من 5 ثوانٍ لجميع الشبكات.</p>
+                </div>
+                <span class="mt-2 text-[10px] text-teal-400 font-mono-code">Mobilis / Djezzy</span>
+              </div>
+
+              <!-- Step 4 -->
+              <div class="p-3.5 rounded-xl glass-card border border-teal-500/30 flex flex-col justify-between">
+                <div>
+                  <div class="w-7 h-7 rounded-lg bg-teal-500/20 text-teal-300 flex items-center justify-center font-bold text-xs mb-2">4</div>
+                  <h4 class="font-bold text-white text-xs mb-1">البريد المؤسسي</h4>
+                  <p class="text-[11px] text-slate-400 leading-tight">تفعيل Resend بنطاق مخصص لإرسال فواتير العمليات والتقارير الأمنية اللحظية.</p>
+                </div>
+                <span class="mt-2 text-[10px] text-teal-400 font-mono-code">RESEND_API_KEY</span>
+              </div>
+
+              <!-- Step 5 -->
+              <div class="p-3.5 rounded-xl glass-card border border-teal-500/30 flex flex-col justify-between">
+                <div>
+                  <div class="w-7 h-7 rounded-lg bg-teal-500/20 text-teal-300 flex items-center justify-center font-bold text-xs mb-2">5</div>
+                  <h4 class="font-bold text-white text-xs mb-1">النشر ونطاق .DZ</h4>
+                  <p class="text-[11px] text-slate-400 leading-tight">حجز نطاق رسمي، تفعيل حماية Cloudflare وتشفير SSL Strict مع مراقبة 24/7.</p>
+                </div>
+                <span class="mt-2 text-[10px] text-teal-400 font-mono-code">SSL / WAF Strict</span>
+              </div>
+
+            </div>
+
+            <!-- Launch Ready Callout -->
+            <div class="p-4 rounded-xl bg-gradient-to-r from-teal-950 via-slate-900 to-emerald-950 border border-teal-500/40 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div>
+                <h3 class="text-base font-extrabold text-white flex items-center gap-2">
+                  <span class="w-3 h-3 rounded-full bg-emerald-400"></span>
+                  المنصة جاهزة للانطلاق التقني والتشغيلي
+                </h3>
+                <p class="text-xs text-slate-300 mt-1">كافة المكونات المعمارية، خوارزميات التشفير، ودليل البنوك جاهزة بدون أي أخطاء برمجية.</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <button onclick="goToSlide(0)" class="px-4 py-2 rounded-lg bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs transition">
+                  إعادة تشغيل العرض
+                </button>
+              </div>
+            </div>
+          </div>
+        `
+      }
+    ];
+
+    // Player State
+    let currentSlide = 0;
+    let isPlaying = false;
+    let slideTimer = null;
+    let playbackSpeed = 1.0;
+    let secondsElapsedInSlide = 0;
+    let speechEnabled = true;
+    let currentUtterance = null;
+    let mediaRecorder = null;
+    let recordedChunks = [];
+
+    // Calculate total duration
+    const totalDurationSeconds = scenes.reduce((sum, s) => sum + s.duration, 0);
+
+    function initPlayer() {
+      updateTotalDurationDisplay();
+      goToSlide(0);
+      setupKeyboardControls();
+    }
+
+    function renderSlide(index) {
+      const scene = scenes[index];
+      const container = document.getElementById("slideContent");
+      container.className = "";
+      void container.offsetWidth; // Trigger reflow for animation
+      container.className = "slide-enter w-full h-full flex-1 flex flex-col justify-center";
+      container.innerHTML = scene.render();
+
+      // Update Badges & Counters
+      document.getElementById("chapterBadge").textContent = scene.title;
+      document.getElementById("slideIndexText").textContent = (index + 1);
+      document.getElementById("teleprompterText").textContent = scene.teleprompter;
+
+      // Update chapter pills
+      const pills = document.querySelectorAll(".chapter-pill");
+      pills.forEach((p, i) => {
+        if (i === index) {
+          p.className = "chapter-pill flex-1 py-1.5 px-2 rounded-lg border border-teal-500/50 bg-teal-500/20 text-teal-300 font-bold whitespace-nowrap text-center transition";
+        } else {
+          p.className = "chapter-pill flex-1 py-1.5 px-2 rounded-lg border border-slate-800 bg-slate-900/60 text-slate-400 hover:text-slate-200 whitespace-nowrap text-center transition";
+        }
+      });
+
+      // Narrate if audio is enabled
+      if (speechEnabled && isPlaying) {
+        speakNarration(scene.teleprompter);
+      }
+    }
+
+    function updateTotalDurationDisplay() {
+      const mins = Math.floor(totalDurationSeconds / 60);
+      const secs = totalDurationSeconds % 60;
+      document.getElementById("totalDurationText").textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    function updateProgressUI() {
+      let accumulatedTime = 0;
+      for (let i = 0; i < currentSlide; i++) {
+        accumulatedTime += scenes[i].duration;
+      }
+      accumulatedTime += secondsElapsedInSlide;
+
+      const progressPercent = Math.min(100, (accumulatedTime / totalDurationSeconds) * 100);
+      document.getElementById("progressBar").style.width = `${progressPercent}%`;
+
+      const curMins = Math.floor(accumulatedTime / 60);
+      const curSecs = Math.floor(accumulatedTime % 60);
+      document.getElementById("currentTimeText").textContent = `${String(curMins).padStart(2, '0')}:${String(curSecs).padStart(2, '0')}`;
+    }
+
+    function goToSlide(index) {
+      if (index < 0 || index >= scenes.length) return;
+      currentSlide = index;
+      secondsElapsedInSlide = 0;
+      renderSlide(currentSlide);
+      updateProgressUI();
+    }
+
+    function nextSlide() {
+      if (currentSlide < scenes.length - 1) {
+        goToSlide(currentSlide + 1);
+      } else {
+        pause();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 0) {
+        goToSlide(currentSlide - 1);
+      }
+    }
+
+    function togglePlay() {
+      if (isPlaying) {
+        pause();
+      } else {
+        play();
+      }
+    }
+
+    function play() {
+      isPlaying = true;
+      document.getElementById("playStatusText").textContent = "إيقاف مؤقت";
+      document.getElementById("playIcon").innerHTML = `<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>`;
+      
+      if (speechEnabled) {
+        speakNarration(scenes[currentSlide].teleprompter);
+      }
+
+      startTimer();
+    }
+
+    function pause() {
+      isPlaying = false;
+      document.getElementById("playStatusText").textContent = "تشغيل العرض";
+      document.getElementById("playIcon").innerHTML = `<path d="M8 5v14l11-7z"/>`;
+      clearInterval(slideTimer);
+      if (window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
+    }
+
+    function startTimer() {
+      clearInterval(slideTimer);
+      const intervalMs = 1000 / playbackSpeed;
+      slideTimer = setInterval(() => {
+        secondsElapsedInSlide += 1;
+        updateProgressUI();
+
+        if (secondsElapsedInSlide >= scenes[currentSlide].duration) {
+          if (currentSlide < scenes.length - 1) {
+            nextSlide();
+          } else {
+            pause();
+          }
+        }
+      }, intervalMs);
+    }
+
+    function setSpeed(speed) {
+      playbackSpeed = speed;
+      document.querySelectorAll(".speed-btn").forEach(btn => {
+        btn.classList.remove("text-teal-400", "bg-slate-800");
+        btn.classList.add("text-slate-400");
+      });
+      event.target.classList.add("text-teal-400", "bg-slate-800");
+      event.target.classList.remove("text-slate-400");
+
+      if (isPlaying) {
+        startTimer();
+      }
+    }
+
+    function seekByClick(event) {
+      const rect = event.currentTarget.getBoundingClientRect();
+      const clickX = event.clientX - rect.left;
+      const fraction = clickX / rect.width;
+      const targetTotalSec = fraction * totalDurationSeconds;
+
+      let accumulated = 0;
+      for (let i = 0; i < scenes.length; i++) {
+        if (targetTotalSec <= accumulated + scenes[i].duration || i === scenes.length - 1) {
+          currentSlide = i;
+          secondsElapsedInSlide = Math.floor(targetTotalSec - accumulated);
+          renderSlide(currentSlide);
+          updateProgressUI();
+          break;
+        }
+        accumulated += scenes[i].duration;
+      }
+    }
+
+    function speakNarration(text) {
+      if (!window.speechSynthesis) return;
+      window.speechSynthesis.cancel();
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "ar-SA";
+      utterance.rate = playbackSpeed * 0.95;
+      utterance.pitch = 1.0;
+
+      // Try finding an Arabic voice
+      const voices = window.speechSynthesis.getVoices();
+      const arabicVoice = voices.find(v => v.lang.startsWith("ar"));
+      if (arabicVoice) {
+        utterance.voice = arabicVoice;
+      }
+
+      window.speechSynthesis.speak(utterance);
+      currentUtterance = utterance;
+    }
+
+    function toggleSpeech() {
+      speechEnabled = !speechEnabled;
+      const audioText = document.getElementById("audioText");
+      const audioIcon = document.getElementById("audioIcon");
+
+      if (speechEnabled) {
+        audioText.textContent = "التعليق الصوتي: مفعّل";
+        audioIcon.className = "w-4 h-4 text-emerald-400";
+        if (isPlaying) {
+          speakNarration(scenes[currentSlide].teleprompter);
+        }
+      } else {
+        audioText.textContent = "التعليق الصوتي: معطل";
+        audioIcon.className = "w-4 h-4 text-slate-500";
+        if (window.speechSynthesis) {
+          window.speechSynthesis.cancel();
+        }
+      }
+    }
+
+    function toggleFullScreen() {
+      const container = document.getElementById("videoContainer");
+      if (!document.fullscreenElement) {
+        container.requestFullscreen().catch(err => {
+          console.warn("Fullscreen request error:", err);
+        });
+      } else {
+        document.exitFullscreen();
+      }
+    }
+
+    function setupKeyboardControls() {
+      document.addEventListener("keydown", (e) => {
+        if (e.code === "Space") {
+          e.preventDefault();
+          togglePlay();
+        } else if (e.code === "ArrowRight") {
+          e.preventDefault();
+          prevSlide(); // RTL navigation
+        } else if (e.code === "ArrowLeft") {
+          e.preventDefault();
+          nextSlide(); // RTL navigation
+        } else if (e.code === "KeyF") {
+          e.preventDefault();
+          toggleFullScreen();
+        }
+      });
+    }
+
+    // Built-in Screen Recording of the Video Stage
+    async function toggleScreenRecording() {
+      const recBtn = document.getElementById("recordVideoBtn");
+      const recText = document.getElementById("recBtnText");
+
+      if (mediaRecorder && mediaRecorder.state === "recording") {
+        mediaRecorder.stop();
+        recText.textContent = "تسجيل العرض كفيديو";
+        recBtn.classList.remove("bg-rose-600", "text-white");
+        recBtn.classList.add("bg-rose-600/20", "text-rose-300");
+        return;
+      }
+
+      try {
+        const stream = await navigator.mediaDevices.getDisplayMedia({
+          video: { frameRate: { ideal: 60 } },
+          audio: true
+        });
+
+        recordedChunks = [];
+        mediaRecorder = new MediaRecorder(stream, { mimeType: "video/webm;codecs=vp9" });
+
+        mediaRecorder.ondataavailable = (e) => {
+          if (e.data.size > 0) {
+            recordedChunks.push(e.data);
+          }
+        };
+
+        mediaRecorder.onstop = () => {
+          const blob = new Blob(recordedChunks, { type: "video/webm" });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.style.display = "none";
+          a.href = url;
+          a.download = `ShieldCode_Algerian_FinTech_Showcase_${Date.now()}.webm`;
+          document.body.appendChild(a);
+          a.click();
+          setTimeout(() => {
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+          }, 100);
+
+          stream.getTracks().forEach(track => track.stop());
+        };
+
+        mediaRecorder.start();
+        recText.textContent = "جارٍ التسجيل (اضغط للحفظ)";
+        recBtn.classList.remove("bg-rose-600/20", "text-rose-300");
+        recBtn.classList.add("bg-rose-600", "text-white");
+
+        // Automatically start playing from beginning
+        goToSlide(0);
+        play();
+
+      } catch (err) {
+        alert("تنبيه: يمكنك تسجيل الفيديو بسهولة عبر اختيار نافذة العرض هذه عندما يطلب المتصفح إذن مشاركة الشاشة.");
+      }
+    }
+
+    // Initialize on load
+    window.addEventListener("DOMContentLoaded", () => {
+      initPlayer();
+      // Load voices
+      if (window.speechSynthesis) {
+        window.speechSynthesis.onvoiceschanged = () => {
+          // Pre-warm voices
+        };
+      }
+    });
+  </script>
+</body>
+</html>

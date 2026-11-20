@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ShieldCode | منصة الأمن السيبراني ومكافحة التصيد للمؤسسات المالية (B2B2C API-First)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background-color: #020617;
+      color: #f8fafc;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.35); }
+      50% { box-shadow: 0 0 28px 6px rgba(16, 185, 129, 0.25); }
+    }
+    .widget-glow {
+      animation: pulseGlow 2.6s infinite;
+    }
+  </style>
+</head>
+<body class="min-h-screen antialiased selection:bg-emerald-500 selection:text-slate-950">
+
+  <!-- Top Header -->
+  <header class="sticky top-0 z-50 border-b border-slate-800/80 bg-slate-950/85 backdrop-blur-xl">
+    <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6 py-4">
+      <div class="flex items-center gap-3">
+        <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-400 to-cyan-500 text-slate-950 font-extrabold text-xl shadow-lg shadow-emerald-500/20">
+          🛡️
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-xl font-extrabold tracking-tight text-white">ShieldCode</h1>
+            <span class="rounded-full border border-emerald-500/30 bg-emerald-500/15 px-2.5 py-0.5 text-xs font-bold text-emerald-300">
+              API-First B2B2C SaaS
+            </span>
+          </div>
+          <p class="text-xs text-slate-400">منصة حقن رمز مكافحة التصيد الذكي للمصارف والمؤسسات المالية</p>
+        </div>
+      </div>
+
+      <!-- View Mode Switcher -->
+      <div class="flex items-center gap-2 rounded-2xl border border-slate-800 bg-slate-900/90 p-1.5">
+        <button onclick="switchTab('split')" id="tab-split" class="rounded-xl bg-emerald-500 px-3.5 py-1.5 text-xs font-bold text-slate-950 transition">
+          العرض الشامل (B2B + البنك + محاكي SMS)
+        </button>
+        <button onclick="switchTab('b2b')" id="tab-b2b" class="rounded-xl px-3.5 py-1.5 text-xs font-bold text-slate-300 hover:text-white transition">
+          1. بوابة الشركات (B2B API)
+        </button>
+        <button onclick="switchTab('bank')" id="tab-bank" class="rounded-xl px-3.5 py-1.5 text-xs font-bold text-slate-300 hover:text-white transition">
+          2. حساب عميل البنك + محاكي SMS
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-7xl px-6 py-8 space-y-8">
+    <!-- Architecture Banner -->
+    <section class="rounded-3xl border border-slate-800/90 bg-gradient-to-l from-slate-900/95 via-slate-900/80 to-emerald-950/30 p-6 shadow-2xl">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+        <div class="space-y-2 max-w-3xl">
+          <span class="inline-flex items-center gap-1.5 rounded-full bg-cyan-500/15 border border-cyan-500/30 px-3 py-1 text-xs font-bold text-cyan-300">
+            ⚡ مشروع التخرج — معمارية API-First B2B2C
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white">
+            كيف يعمل نظام <span class="text-emerald-400">ShieldCode</span> مع البنوك؟
+          </h2>
+          <p class="text-sm text-slate-300 leading-relaxed">
+            تقوم المؤسسة المالية بالتسجيل في منصتنا للحصول على مفتاح ربط (<code class="text-cyan-300 font-mono" dir="ltr">api_key</code>). وبمجرد تفعيل الربط البرمجي، يتم <strong>حقن أداة الحماية (ShieldCode Widget) تلقائياً</strong> داخل لوحة تحكم عميل البنك ليقوم بتعيين رمزه الشخصي (مثل: <code class="text-emerald-300 font-mono" dir="ltr">[Ayoub]</code>)، والذي يظهر في كل رسالة SMS حقيقية يصدرها البنك.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3 text-center shrink-0">
+          <div class="rounded-2xl border border-slate-800 bg-slate-950/80 p-3.5">
+            <p class="text-xs text-slate-400">الشركة الشريكة</p>
+            <p id="stat-company" class="mt-1 font-bold text-emerald-400 text-sm" dir="ltr">FinanzaBank</p>
+          </div>
+          <div class="rounded-2xl border border-slate-800 bg-slate-950/80 p-3.5">
+            <p class="text-xs text-slate-400">الرمز الشخصي للعميل</p>
+            <p id="stat-code" class="mt-1 font-mono font-extrabold text-cyan-300 text-sm" dir="ltr">[Ayoub]</p>
+          </div>
+          <div class="rounded-2xl border border-slate-800 bg-slate-950/80 p-3.5">
+            <p class="text-xs text-slate-400">طلبات الـ API</p>
+            <p id="stat-requests" class="mt-1 font-mono font-extrabold text-white text-sm">18</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <!-- ==================================================================
+           COLUMN 1 (5 COLS): B2B PARTNER COMPANY PORTAL
+      =================================================================== -->
+      <section id="panel-b2b" class="lg:col-span-5 space-y-6">
+        <div class="rounded-3xl border border-slate-800 bg-slate-900/75 p-6 shadow-2xl space-y-5">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+            <div>
+              <span class="text-xs font-bold text-cyan-400">بوابة المؤسسات المالية (B2B Portal)</span>
+              <h3 class="text-lg font-extrabold text-white mt-0.5">تسجيل مؤسسة وتوليد API Key</h3>
+            </div>
+            <span class="rounded-lg bg-slate-950 border border-slate-800 px-2.5 py-1 font-mono text-[11px] text-cyan-300" dir="ltr">
+              POST /api/v1/register-company
+            </span>
+          </div>
+
+          <form onsubmit="registerCompany(event)" class="space-y-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-300 mb-1.5">اسم البنك أو المؤسسة المالية</label>
+              <input id="input-company-name" type="text" value="FinanzaBank" required
+                class="w-full rounded-xl border border-slate-700 bg-slate-950 px-3.5 py-2.5 text-sm text-white focus:border-cyan-400 focus:outline-none" />
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-bold text-slate-300 mb-1.5">نوع المؤسسة</label>
+                <select id="input-company-type" class="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2.5 text-sm text-white">
+                  <option value="Digital Bank">بنك رقمي (Digital Bank)</option>
+                  <option value="Commercial Bank">بنك تجاري (Commercial Bank)</option>
+                  <option value="FinTech Wallet">محفظة مالية (FinTech)</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-300 mb-1.5">حالة حقن الـ Widget</label>
+                <button type="button" onclick="toggleIntegration()" id="btn-toggle-integration"
+                  class="w-full rounded-xl border border-emerald-500/40 bg-emerald-500/15 px-3 py-2.5 text-xs font-bold text-emerald-300">
+                  ✅ الربط البرمجي مفعّل (متصل)
+                </button>
+              </div>
+            </div>
+
+            <button type="submit"
+              class="w-full rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-500 py-3 text-sm font-extrabold text-slate-950 hover:from-cyan-400 hover:to-emerald-400 transition shadow-lg shadow-cyan-500/15">
+              🔑 توليد مفتاح API جديد للمؤسسة
+            </button>
+          </form>
+
+          <!-- Issued API Key & Embeddable SDK Snippet -->
+          <div class="space-y-3 pt-2 border-t border-slate-800">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-400">مفتاح الربط النشط (<code dir="ltr">X-Shield-Api-Key</code>):</span>
+              <span class="text-[11px] text-emerald-400 font-bold">● متصل بالخادم</span>
+            </div>
+            <div class="rounded-xl border border-slate-800 bg-slate-950 p-3 font-mono text-xs text-emerald-300 break-all" dir="ltr" id="display-api-key">
+              sc_live_finanza_9f8e7d6c5b4a3210
+            </div>
+
+            <span class="block text-xs font-bold text-slate-400">كود التضمين الفوري في موقع البنك (Embeddable Widget SDK):</span>
+            <pre class="rounded-xl border border-slate-800 bg-slate-950 p-3 font-mono text-[11px] text-cyan-300 overflow-x-auto" dir="ltr" id="display-sdk-code">&lt;script src="https://cdn.shieldcode.io/sdk/v1.js"
+  data-api-key="sc_live_finanza_9f8e7d6c5b4a3210"
+  data-user-id="CUST-1001"&gt;&lt;/script&gt;</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================================================================
+           COLUMN 2 (7 COLS): END-USER BANK VIEW + INJECTED WIDGET + SMS SIMULATOR
+      =================================================================== -->
+      <section id="panel-bank" class="lg:col-span-7 space-y-6">
+        <!-- Bank Customer Account Mockup -->
+        <div class="rounded-3xl border border-slate-800 bg-slate-900/80 overflow-hidden shadow-2xl">
+          <!-- Bank Top Bar -->
+          <div class="flex flex-wrap items-center justify-between gap-3 bg-slate-950 px-6 py-4 border-b border-slate-800">
+            <div class="flex items-center gap-3">
+              <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600 text-white font-bold">
+                🏦
+              </div>
+              <div>
+                <h4 class="font-extrabold text-white text-sm" id="bank-header-title">FinanzaBank — الحساب البنكي للعميل</h4>
+                <p class="text-[11px] text-slate-400">العميل: <strong>أيوب بن علي (Ayoub Benali)</strong> • رقم الحساب: <code dir="ltr">CUST-1001</code></p>
+              </div>
+            </div>
+            <div class="text-left" dir="ltr">
+              <span class="text-[11px] text-slate-400 block">Available Balance</span>
+              <span class="text-lg font-extrabold text-emerald-400">$24,850.00</span>
+            </div>
+          </div>
+
+          <div class="p-6 space-y-6">
+            <!-- Dynamically Injected ShieldCode Widget -->
+            <div id="injected-widget-container" class="widget-glow rounded-2xl border-2 border-emerald-500/50 bg-gradient-to-br from-emerald-950/40 via-slate-950 to-slate-950 p-5 space-y-4">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div class="flex items-center gap-2">
+                  <span class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-500 text-slate-950 font-bold text-sm">🛡️</span>
+                  <div>
+                    <div class="flex items-center gap-2">
+                      <h5 class="font-extrabold text-white text-sm">أداة ShieldCode المحقونة تلقائياً عبر الـ API</h5>
+                      <span class="rounded-full bg-emerald-500/20 border border-emerald-500/40 px-2 py-0.5 text-[10px] font-bold text-emerald-300">
+                        Injected via SDK
+                      </span>
+                    </div>
+                    <p class="text-xs text-slate-400">حدد رمزك الشخصي ليظهر في بداية كل رسالة SMS رسمية تصلك من البنك</p>
+                  </div>
+                </div>
+                <span class="rounded-lg bg-slate-900 border border-slate-800 px-2.5 py-1 font-mono text-[11px] text-emerald-300" dir="ltr">
+                  POST /api/v1/shield/configure
+                </span>
+              </div>
+
+              <form onsubmit="configureShieldCode(event)" class="flex flex-col sm:flex-row gap-3">
+                <input id="input-security-code" type="text" value="Ayoub" maxlength="20" required
+                  placeholder="أدخل رمز الحماية الشخصي (مثلاً: Ayoub)"
+                  class="flex-1 rounded-xl border border-slate-700 bg-slate-900 px-4 py-2.5 font-mono text-sm font-bold text-emerald-300 focus:border-emerald-400 focus:outline-none" dir="ltr" />
+                <button type="submit"
+                  class="rounded-xl bg-emerald-500 px-6 py-2.5 text-sm font-extrabold text-slate-950 hover:bg-emerald-400 transition shrink-0">
+                  💾 حفظ وتفعيل الرمز في الخزنة
+                </button>
+              </form>
+            </div>
+
+            <!-- Disabled Widget Notice (Shown when Partner pauses API integration) -->
+            <div id="disabled-widget-notice" class="hidden rounded-2xl border border-amber-500/40 bg-amber-500/10 p-4 text-center text-xs text-amber-300">
+              ⚠️ تم إيقاف ربط الـ API من لوحة تحكم الشركة، لذلك اختفت أداة ShieldCode من حساب العميل! أعد تفعيل الربط لترى كيف تُحقن الأداة تلقائياً.
+            </div>
+
+            <!-- Live SMS Simulator Section -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center pt-2">
+              <div class="md:col-span-6 space-y-3">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-cyan-400">محاكي رسائل البنك الفوري (Live SMS Simulator)</span>
+                  <span class="font-mono text-[11px] text-slate-400" dir="ltr">GET /api/v1/sms/simulate</span>
+                </div>
+                <h4 class="text-base font-extrabold text-white">اختبر الفرق بين الرسالة البنكية الحقيقية والرسالة المزورة</h4>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                  عند إرسال عملية سحب أو تحويل، يقوم خادم البنك باستدعاء <code class="text-cyan-300" dir="ltr">/api/v1/sms/simulate</code> ليتم ختم الرسالة برمز العميل السري قبل إرسالها للهاتف.
+                </p>
+
+                <div class="space-y-2.5 pt-2">
+                  <button type="button" onclick="simulateSms('transfer')"
+                    class="w-full rounded-xl bg-gradient-to-r from-emerald-500 to-teal-400 py-2.5 px-4 text-xs font-extrabold text-slate-950 hover:opacity-95 transition">
+                    📲 محاكاة رسالة SMS بنكية شرعية (مختومة بـ ShieldCode)
+                  </button>
+                  <button type="button" onclick="simulatePhishingSms()"
+                    class="w-full rounded-xl border border-rose-500/50 bg-rose-500/15 py-2.5 px-4 text-xs font-bold text-rose-300 hover:bg-rose-500/25 transition">
+                    🚨 محاكاة هجوم تصيد (رسالة SMS منتحلة بدون الرمز السري)
+                  </button>
+                </div>
+              </div>
+
+              <!-- 3D Smartphone Frame -->
+              <div class="md:col-span-6">
+                <div class="mx-auto max-w-[290px] rounded-[34px] border-4 border-slate-700 bg-slate-950 p-4 shadow-2xl">
+                  <div class="mx-auto mb-3 h-4 w-24 rounded-full bg-slate-900 border border-slate-800"></div>
+                  <div class="text-center border-b border-slate-800 pb-2 mb-3">
+                    <p class="text-[11px] font-bold text-white" id="phone-sender-title">FinanzaBank Official</p>
+                    <p class="text-[10px] text-emerald-400">Verified SMS Shortcode</p>
+                  </div>
+
+                  <div id="sms-messages-list" class="space-y-3 min-h-[175px] max-h-[220px] overflow-y-auto p-1 text-left" dir="ltr">
+                    <div class="rounded-2xl rounded-tl-sm border border-emerald-500/40 bg-emerald-950/30 p-3 text-xs text-slate-200 leading-relaxed">
+                      <span class="inline-block rounded bg-emerald-500 px-1.5 py-0.5 font-mono font-extrabold text-slate-950 mr-1">[Ayoub]</span>
+                      <strong>FinanzaBank:</strong> Your OTP is <span class="font-mono font-bold text-emerald-300">849201</span> to authorize a transfer of $1,250.00.
+                      <div class="mt-1.5 text-[10px] text-emerald-400 font-semibold">✓ ShieldCode Verified Stamp</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    let currentApiKey = "sc_live_finanza_9f8e7d6c5b4a3210";
+    let currentCompany = "FinanzaBank";
+    let currentShieldCode = "Ayoub";
+    let integrationActive = true;
+    let totalApiRequests = 18;
+
+    function updateStats() {
+      document.getElementById("stat-company").textContent = currentCompany;
+      document.getElementById("stat-code").textContent = `[${currentShieldCode}]`;
+      document.getElementById("stat-requests").textContent = String(totalApiRequests);
+      document.getElementById("bank-header-title").textContent = `${currentCompany} — الحساب البنكي للعميل`;
+      document.getElementById("phone-sender-title").textContent = `${currentCompany} Official`;
+    }
+
+    function switchTab(mode) {
+      const b2b = document.getElementById("panel-b2b");
+      const bank = document.getElementById("panel-bank");
+      b2b.classList.remove("hidden", "lg:col-span-12");
+      bank.classList.remove("hidden", "lg:col-span-12");
+      b2b.classList.add("lg:col-span-5");
+      bank.classList.add("lg:col-span-7");
+
+      if (mode === "b2b") {
+        bank.classList.add("hidden");
+        b2b.classList.remove("lg:col-span-5");
+        b2b.classList.add("lg:col-span-12");
+      } else if (mode === "bank") {
+        b2b.classList.add("hidden");
+        bank.classList.remove("lg:col-span-7");
+        bank.classList.add("lg:col-span-12");
+      }
+    }
+
+    function toggleIntegration() {
+      integrationActive = !integrationActive;
+      const btn = document.getElementById("btn-toggle-integration");
+      const widget = document.getElementById("injected-widget-container");
+      const notice = document.getElementById("disabled-widget-notice");
+
+      if (integrationActive) {
+        btn.textContent = "✅ الربط البرمجي مفعّل (متصل)";
+        btn.className = "w-full rounded-xl border border-emerald-500/40 bg-emerald-500/15 px-3 py-2.5 text-xs font-bold text-emerald-300";
+        widget.classList.remove("hidden");
+        notice.classList.add("hidden");
+      } else {
+        btn.textContent = "⏸️ الربط البرمجي متوقف مؤقتاً";
+        btn.className = "w-full rounded-xl border border-amber-500/40 bg-amber-500/15 px-3 py-2.5 text-xs font-bold text-amber-300";
+        widget.classList.add("hidden");
+        notice.classList.remove("hidden");
+      }
+    }
+
+    async function registerCompany(e) {
+      e.preventDefault();
+      const name = document.getElementById("input-company-name").value.trim();
+      const type = document.getElementById("input-company-type").value;
+      if (!name) return;
+
+      try {
+        const res = await fetch("/api/v1/register-company", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ company_name: name, institution_type: type })
+        });
+        const data = await res.json();
+        if (res.ok && data.api_key) {
+          currentApiKey = data.api_key;
+          currentCompany = data.company.company_name;
+        }
+      } catch (_) {
+        const slug = name.toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 8) || "bank";
+        currentApiKey = `sc_live_${slug}_${Math.random().toString(16).slice(2, 12)}`;
+        currentCompany = name;
+      }
+
+      totalApiRequests += 1;
+      document.getElementById("display-api-key").textContent = currentApiKey;
+      document.getElementById("display-sdk-code").textContent =
+        `<script src="https://cdn.shieldcode.io/sdk/v1.js"\n  data-api-key="${currentApiKey}"\n  data-user-id="CUST-1001"><\/script>`;
+      updateStats();
+    }
+
+    async function configureShieldCode(e) {
+      e.preventDefault();
+      const code = document.getElementById("input-security-code").value.trim();
+      if (!code) return;
+
+      try {
+        const res = await fetch("/api/v1/shield/configure", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Shield-Api-Key": currentApiKey
+          },
+          body: JSON.stringify({
+            external_user_id: "CUST-1001",
+            security_code: code
+          })
+        });
+        const data = await res.json();
+        if (res.ok && data.security_code) {
+          currentShieldCode = data.security_code;
+        } else {
+          currentShieldCode = code;
+        }
+      } catch (_) {
+        currentShieldCode = code;
+      }
+
+      totalApiRequests += 1;
+      updateStats();
+      await simulateSms("transfer");
+    }
+
+    async function simulateSms(action) {
+      let otp = Math.floor(100000 + Math.random() * 900000);
+      try {
+        const res = await fetch(`/api/v1/sms/simulate?external_user_id=CUST-1001&action=${action}`, {
+          headers: { "X-Shield-Api-Key": currentApiKey }
+        });
+        const data = await res.json();
+        if (res.ok && data.generated_otp) {
+          otp = data.generated_otp;
+          if (data.embedded_security_code) currentShieldCode = data.embedded_security_code;
+        }
+      } catch (_) {}
+
+      totalApiRequests += 1;
+      updateStats();
+
+      const list = document.getElementById("sms-messages-list");
+      const msg = document.createElement("div");
+      msg.className = "rounded-2xl rounded-tl-sm border border-emerald-500/40 bg-emerald-950/30 p-3 text-xs text-slate-200 leading-relaxed";
+      msg.innerHTML = `
+        <span class="inline-block rounded bg-emerald-500 px-1.5 py-0.5 font-mono font-extrabold text-slate-950 mr-1">[${currentShieldCode}]</span>
+        <strong>${currentCompany}:</strong> Your OTP is <span class="font-mono font-bold text-emerald-300">${otp}</span> to authorize a transfer of $1,250.00.
+        <div class="mt-1.5 text-[10px] text-emerald-400 font-semibold">✓ ShieldCode Verified Stamp</div>
+      `;
+      list.prepend(msg);
+    }
+
+    function simulatePhishingSms() {
+      const list = document.getElementById("sms-messages-list");
+      const msg = document.createElement("div");
+      msg.className = "rounded-2xl rounded-tl-sm border border-rose-500/50 bg-rose-950/40 p-3 text-xs text-rose-100 leading-relaxed";
+      msg.innerHTML = `
+        <span class="inline-block rounded bg-rose-500 px-1.5 py-0.5 font-mono font-extrabold text-white mr-1">[MISSING CODE!]</span>
+        <strong>${currentCompany}-Alert:</strong> Urgent! Your account is suspended. Click http://finanza-verify-fake.com to unlock.
+        <div class="mt-1.5 text-[10px] text-rose-300 font-bold">⚠️ تحذير: لا تحتوي على رمزك [${currentShieldCode}] — رسالة تصيد احتيالي!</div>
+      `;
+      list.prepend(msg);
+    }
+  </script>
+</body>
+</html>

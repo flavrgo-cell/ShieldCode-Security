@@ -154,15 +154,15 @@ export function SelfieCamera({ onCapture, onCancel }: SelfieCameraProps) {
             muted
             onLoadedMetadata={() => setIsLoading(false)}
             className={cn(
-              "w-full h-full object-cover scale-x-[-1]",
+              "w-full h-full object-cover scale-x-[-1] gpu-accelerated",
               (isLoading || !!error) && "opacity-0"
             )}
           />
         ) : (
           <img
-            src={capturedImage || "/placeholder.svg"}
+            src={capturedImage}
             alt="Captured selfie"
-            className="w-full h-full object-cover scale-x-[-1]"
+            className="w-full h-full object-cover scale-x-[-1] gpu-accelerated"
           />
         )}
 

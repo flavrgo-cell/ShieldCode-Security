@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
+import { VectorUserAvatar } from "@/components/vector-graphics";
 import {
   Dialog,
   DialogContent,
@@ -124,16 +124,15 @@ export function TransactionDetailModal({ transaction, onClose }: TransactionDeta
                 </div>
               )}
               {transaction.selfie_url ? (
-                <Image
-                  src={transaction.selfie_url || "/placeholder.svg"}
+                <img
+                  src={transaction.selfie_url}
                   alt="Verification selfie"
-                  fill
-                  className="object-cover"
+                  className="h-full w-full object-cover"
                   onLoad={() => setImageLoading(false)}
                 />
               ) : (
-                <div className="absolute inset-0 flex items-center justify-center text-muted-foreground">
-                  <User className="w-12 h-12" />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <VectorUserAvatar className="w-24 h-24" />
                 </div>
               )}
             </div>

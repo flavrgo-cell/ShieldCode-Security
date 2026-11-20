@@ -1,4 +1,4 @@
-export type Provider = 'baridimob' | 'redotpay' | 'eccp'
+export type Provider = 'edahabia' | 'baridimob' | 'redotpay' | 'eccp'
 
 export type TransactionStatus = 'pending' | 'approved' | 'rejected' | 'expired'
 
@@ -51,6 +51,11 @@ export interface CheckoutFormData {
 }
 
 export const PROVIDER_INFO: Record<Provider, { name: string; color: string; description: string }> = {
+  edahabia: {
+    name: 'Edahabia (البطاقة الذهبية)',
+    color: '#D4AF37',
+    description: 'Algérie Poste Postal Gold Card (BIN 6280)'
+  },
   baridimob: {
     name: 'BaridiMob',
     color: '#00A651',

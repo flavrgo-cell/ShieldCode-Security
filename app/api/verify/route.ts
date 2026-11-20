@@ -1,11 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { isSupabaseConfigured } from '@/lib/supabase/api'
 
 export async function GET(request: NextRequest) {
   const token = request.nextUrl.searchParams.get('token')
 
   if (!token) {
     return NextResponse.json({ error: 'Missing token' }, { status: 400 })
+  }
+
+  if (!isSupabaseConfigured()) {
+    return NextResponse.json(
+      { error: 'Supabase database is not configured in .env.local yet.' },
+      { status: 503 }
+    )
   }
 
   const supabase = await createClient()
@@ -90,6 +98,13 @@ export async function POST(request: NextRequest) {
 
     if (!token || !action || !['approve', 'reject'].includes(action)) {
       return NextResponse.json({ error: 'Invalid request' }, { status: 400 })
+    }
+
+    if (!isSupabaseConfigured()) {
+      return NextResponse.json(
+        { error: 'Supabase database is not configured in .env.local yet.' },
+        { status: 503 }
+      )
     }
 
     const supabase = await createClient()

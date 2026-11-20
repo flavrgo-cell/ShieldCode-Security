@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { CheckCircle, XCircle, AlertTriangle, Clock, Shield } from 'lucide-react'
+import { VectorUserAvatar } from '@/components/vector-graphics'
 
 interface TransactionDetails {
   id: string
@@ -279,11 +280,15 @@ export function VerifyContent() {
               <div className="space-y-2">
                 <p className="text-sm text-muted-foreground text-center">Photo of requester:</p>
                 <div className="flex justify-center">
-                  <img
-                    src={transaction.selfie_url || '/placeholder.svg'}
-                    alt="Requester photo"
-                    className="w-32 h-32 object-cover rounded-lg border-2 border-muted"
-                  />
+                  {transaction.selfie_url ? (
+                    <img
+                      src={transaction.selfie_url}
+                      alt="Requester photo"
+                      className="w-32 h-32 object-cover rounded-xl border-2 border-teal-500/30 shadow-retina-card"
+                    />
+                  ) : (
+                    <VectorUserAvatar className="w-32 h-32 rounded-xl ring-1 ring-teal-500/20 dark:ring-white/10 shadow-retina-card" />
+                  )}
                 </div>
               </div>
 
