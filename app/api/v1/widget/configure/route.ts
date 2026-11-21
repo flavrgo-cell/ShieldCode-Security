@@ -4,7 +4,7 @@ import { getShieldCodeDb } from "@/lib/shieldcode-b2b-store";
 import {
   verifyWidgetSessionJwt,
   signWidgetSessionJwt,
-} from "@/app/api/v1/widget/session/route";
+} from "@/lib/widget-jwt";
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",

@@ -295,7 +295,7 @@ export function CheckoutModal({ product, onClose }: CheckoutModalProps) {
                 <span className="inline-block rounded-full bg-teal-100 dark:bg-teal-950/80 px-2 py-0.5 text-[10px] font-extrabold text-teal-800 dark:text-teal-300 mb-1">
                   {isAr ? "المنتج المحدد" : "Selected Item"}
                 </span>
-                <h3 className="text-sm sm:text-base font-extrabold truncate text-slate-900 dark:text-white">
+                <h3 className="text-sm sm:text-base font-extrabold line-clamp-2 sm:line-clamp-1 text-slate-900 dark:text-white leading-tight">
                   {product.name}
                 </h3>
                 <p className="text-xl sm:text-2xl font-black text-teal-700 dark:text-cyan-300 tabular-nums">
@@ -470,10 +470,10 @@ export function CheckoutModal({ product, onClose }: CheckoutModalProps) {
               {/* Continue to Selfie Camera Verification Button */}
               <Button
                 type="submit"
-                className="w-full h-13 rounded-2xl anti-banding-teal font-extrabold text-white text-base shadow-retina-glow gap-2 hover-lift-gpu cursor-pointer"
+                className="w-full min-h-[50px] py-3 px-3 sm:px-4 rounded-2xl anti-banding-teal font-extrabold text-white text-xs sm:text-base shadow-retina-glow gap-1.5 sm:gap-2 hover-lift-gpu cursor-pointer text-center"
               >
-                <Camera className="w-5 h-5" />
-                <span>
+                <Camera className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
+                <span className="truncate sm:whitespace-normal">
                   {isAr
                     ? "المتابعة إلى التحقق بكاميرا السيلفي 📸"
                     : "Continue to Selfie Camera Verification 📸"}
